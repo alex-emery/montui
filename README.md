@@ -2,6 +2,17 @@
 
 The cli budgeting money TUI.
 
+# Setup
+
+Requires a .env file with
+```
+SECRET_ID=
+SECRET_KEY=
+```
+
+filled in.
+These can be obtained from https://gocardless.com/bank-account-data/
+
 # Walkthrough 
 
 Press tab to change between pages

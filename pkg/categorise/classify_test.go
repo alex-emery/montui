@@ -1,7 +1,6 @@
 package categorise_test
 
 import (
-	"context"
 	"testing"
 
 	"github.com/alex-emery/montui/pkg/categorise"
@@ -20,7 +19,11 @@ func TestCategoryise(t *testing.T) {
 			Description: "AMAZON PRIME",
 		},
 	}
-	c.Categorise(context.Background(), transactions...)
+
+	err = c.Categorise(transactions...)
+	if err != nil {
+		t.Fatal("unexpected error", err)
+	}
 
 	if transactions[0].CategoryID == nil {
 		t.Fatalf("failed to classify %v", transactions[0])

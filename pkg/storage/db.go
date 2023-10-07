@@ -45,18 +45,17 @@ func New(filename string) (Storage, error) {
 
 	db, err := gorm.Open(sqlite.Open(filename), &gorm.Config{Logger: gormLogger})
 	if err != nil {
-		return nil, fmt.Errorf("failed to open db: %v", err)
+		return nil, fmt.Errorf("failed to open db: %w", err)
 	}
 
-	db.AutoMigrate(Transaction{})
-	db.AutoMigrate(Category{})
-	db.AutoMigrate(Rule{})
-	db.AutoMigrate(Account{})
-	db.AutoMigrate(Requisition{})
+	db.AutoMigrate(Transaction{}) //nolint:errcheck
+	db.AutoMigrate(Category{})    //nolint:errcheck
+	db.AutoMigrate(Rule{})        //nolint:errcheck
+	db.AutoMigrate(Account{})     //nolint:errcheck
+	db.AutoMigrate(Requisition{}) //nolint:errcheck
 
 	store := &storageImpl{db: db}
 
-	// _ = shouldSeed
 	if shouldSeed {
 		store.populate()
 	}
@@ -119,23 +118,25 @@ func (s *storageImpl) Requisitions() RequsitionGetter {
 }
 
 func (s *storageImpl) populate() {
-	categoryToId := map[string]uint{}
+	categoryToID := map[string]uint{}
 
 	categoryColors, _ := colorful.WarmPalette(len(categoryList))
 
 	for index, category := range categoryList {
 		model := &Category{Name: category, Color: categoryColors[index].Hex()}
 		res := s.db.Save(model)
+
 		if res.Error != nil {
 			fmt.Println(res.Error)
 		}
-		categoryToId[category] = model.ID
+
+		categoryToID[category] = model.ID
 	}
 
 	for pattern, category := range rulesMap {
 		res := s.db.Save(&Rule{
 			Pattern:    pattern,
-			CategoryID: categoryToId[category],
+			CategoryID: categoryToID[category],
 		})
 
 		if res.Error != nil {

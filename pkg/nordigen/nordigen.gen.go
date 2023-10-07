@@ -59,11 +59,11 @@ type Account struct {
 	// Iban The Account IBAN
 	Iban *string `json:"iban,omitempty"`
 
-	// Id The ID of this Account, used to refer to this account in other API calls.
-	Id *openapi_types.UUID `json:"id,omitempty"`
+	// ID The ID of this Account, used to refer to this account in other API calls.
+	ID *openapi_types.UUID `json:"id,omitempty"`
 
-	// InstitutionId The ASPSP associated with this account.
-	InstitutionId *string `json:"institution_id,omitempty"`
+	// InstitutionID The ASPSP associated with this account.
+	InstitutionID *string `json:"institution_id,omitempty"`
 
 	// LastAccessed The date & time at which the account object was last accessed.
 	LastAccessed *time.Time `json:"last_accessed"`
@@ -148,8 +148,8 @@ type BankTransactionStatusSchema struct {
 
 // CurrencyExchangeSchema defines model for CurrencyExchangeSchema.
 type CurrencyExchangeSchema struct {
-	// ContractIdentification contractIdentification
-	ContractIdentification *string `json:"contractIdentification,omitempty"`
+	// ContractIDentification contractIDentification
+	ContractIDentification *string `json:"contractIDentification,omitempty"`
 
 	// ExchangeRate exchangeRate
 	ExchangeRate *string `json:"exchangeRate,omitempty"`
@@ -214,8 +214,8 @@ type DetailSchema struct {
 	// Product product
 	Product *string `json:"product,omitempty"`
 
-	// ResourceId resourceId
-	ResourceId *string `json:"resourceId,omitempty"`
+	// ResourceID resourceID
+	ResourceID *string `json:"resourceID,omitempty"`
 
 	// Status status
 	Status *string `json:"status,omitempty"`
@@ -238,11 +238,11 @@ type EndUserAgreement struct {
 	// Created The date & time at which the end user agreement was created.
 	Created *time.Time `json:"created,omitempty"`
 
-	// Id The ID of this End User Agreement, used to refer to this end user agreement in other API calls.
-	Id *openapi_types.UUID `json:"id,omitempty"`
+	// ID The ID of this End User Agreement, used to refer to this end user agreement in other API calls.
+	ID *openapi_types.UUID `json:"id,omitempty"`
 
-	// InstitutionId an Institution ID for this EUA
-	InstitutionId string `json:"institution_id"`
+	// InstitutionID an Institution ID for this EUA
+	InstitutionID string `json:"institution_id"`
 
 	// MaxHistoricalDays Maximum number of days of transaction data to retrieve.
 	MaxHistoricalDays *int `json:"max_historical_days,omitempty"`
@@ -256,8 +256,8 @@ type EndUserAgreementRequest struct {
 	// AccessValidForDays Number of days from acceptance that the access can be used.
 	AccessValidForDays *int `json:"access_valid_for_days,omitempty"`
 
-	// InstitutionId an Institution ID for this EUA
-	InstitutionId string `json:"institution_id"`
+	// InstitutionID an Institution ID for this EUA
+	InstitutionID string `json:"institution_id"`
 
 	// MaxHistoricalDays Maximum number of days of transaction data to retrieve.
 	MaxHistoricalDays *int `json:"max_historical_days,omitempty"`
@@ -281,7 +281,7 @@ type ErrorResponse struct {
 type Integration struct {
 	Bic                  *string  `json:"bic,omitempty"`
 	Countries            []string `json:"countries"`
-	Id                   string   `json:"id"`
+	ID                   string   `json:"id"`
 	Logo                 string   `json:"logo"`
 	Name                 string   `json:"name"`
 	TransactionTotalDays *string  `json:"transaction_total_days,omitempty"`
@@ -291,8 +291,8 @@ type Integration struct {
 type IntegrationRetrieve struct {
 	Bic                  *string                `json:"bic,omitempty"`
 	Countries            []string               `json:"countries"`
-	Id                   string                 `json:"id"`
-	IdentificationCodes  []interface{}          `json:"identification_codes"`
+	ID                   string                 `json:"id"`
+	IDentificationCodes  []interface{}          `json:"identification_codes"`
 	Logo                 string                 `json:"logo"`
 	Name                 string                 `json:"name"`
 	SupportedFeatures    []interface{}          `json:"supported_features"`
@@ -302,8 +302,8 @@ type IntegrationRetrieve struct {
 
 // JWTObtainPairRequest Obtain JWT pair.
 type JWTObtainPairRequest struct {
-	// SecretId Secret id from /user-secrets/
-	SecretId string `json:"secret_id"`
+	// SecretID Secret id from /user-secrets/
+	SecretID string `json:"secret_id"`
 
 	// SecretKey Secret key from /user-secrets/
 	SecretKey string `json:"secret_key"`
@@ -361,10 +361,10 @@ type Requisition struct {
 
 	// Created The date & time at which the requisition was created.
 	Created *time.Time          `json:"created"`
-	Id      *openapi_types.UUID `json:"id,omitempty"`
+	ID      *openapi_types.UUID `json:"id,omitempty"`
 
-	// InstitutionId an Institution ID for this Requisition
-	InstitutionId string `json:"institution_id"`
+	// InstitutionID an Institution ID for this Requisition
+	InstitutionID string `json:"institution_id"`
 
 	// Link link to initiate authorization with Institution
 	Link *string `json:"link,omitempty"`
@@ -396,8 +396,8 @@ type RequisitionRequest struct {
 	// Agreement EUA associated with this requisition
 	Agreement *openapi_types.UUID `json:"agreement,omitempty"`
 
-	// InstitutionId an Institution ID for this Requisition
-	InstitutionId string `json:"institution_id"`
+	// InstitutionID an Institution ID for this Requisition
+	InstitutionID string `json:"institution_id"`
 
 	// Redirect redirect URL to your application after end-user authorization with ASPSP
 	Redirect *string `json:"redirect"`
@@ -452,10 +452,10 @@ type SpectacularRequisition struct {
 
 	// Created The date & time at which the requisition was created.
 	Created *time.Time          `json:"created"`
-	Id      *openapi_types.UUID `json:"id,omitempty"`
+	ID      *openapi_types.UUID `json:"id,omitempty"`
 
-	// InstitutionId an Institution ID for this Requisition
-	InstitutionId string `json:"institution_id"`
+	// InstitutionID an Institution ID for this Requisition
+	InstitutionID string `json:"institution_id"`
 
 	// Link link to initiate authorization with Institution
 	Link *string `json:"link,omitempty"`
@@ -505,14 +505,14 @@ type TransactionSchema struct {
 	// BookingDateTime bookingDateTime
 	BookingDateTime *string `json:"bookingDateTime,omitempty"`
 
-	// CheckId checkId
-	CheckId *string `json:"checkId,omitempty"`
+	// CheckID checkID
+	CheckID *string `json:"checkID,omitempty"`
 
 	// CreditorAccount creditorAccount
 	CreditorAccount *AccountSchema `json:"creditorAccount,omitempty"`
 
-	// CreditorId creditorId
-	CreditorId *string `json:"creditorId,omitempty"`
+	// CreditorID creditorID
+	CreditorID *string `json:"creditorID,omitempty"`
 
 	// CreditorName creditorName
 	CreditorName *string `json:"creditorName,omitempty"`
@@ -526,17 +526,17 @@ type TransactionSchema struct {
 	// DebtorName debtorName
 	DebtorName *string `json:"debtorName,omitempty"`
 
-	// EndToEndId endToEndId
-	EndToEndId *string `json:"endToEndId,omitempty"`
+	// EndToEndID endToEndID
+	EndToEndID *string `json:"endToEndID,omitempty"`
 
 	// EntryReference entryReference
 	EntryReference *string `json:"entryReference,omitempty"`
 
-	// InternalTransactionId internalTransactionId
-	InternalTransactionId *string `json:"internalTransactionId,omitempty"`
+	// InternalTransactionID internalTransactionID
+	InternalTransactionID *string `json:"internalTransactionID,omitempty"`
 
-	// MandateId mandateId
-	MandateId *string `json:"mandateId,omitempty"`
+	// MandateID mandateID
+	MandateID *string `json:"mandateID,omitempty"`
 
 	// MerchantCategoryCode merchantCategoryCode
 	MerchantCategoryCode *string `json:"merchantCategoryCode,omitempty"`
@@ -562,8 +562,8 @@ type TransactionSchema struct {
 	// TransactionAmount transactionAmount
 	TransactionAmount TransactionAmountSchema `json:"transactionAmount"`
 
-	// TransactionId transactionId
-	TransactionId *string `json:"transactionId,omitempty"`
+	// TransactionID transactionID
+	TransactionID *string `json:"transactionID,omitempty"`
 
 	// UltimateCreditor ultimateCreditor
 	UltimateCreditor *string `json:"ultimateCreditor,omitempty"`
@@ -792,11 +792,11 @@ type ClientInterface interface {
 
 	CreateEUAWithFormdataBody(ctx context.Context, body CreateEUAFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteEUAById request
-	DeleteEUAById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// DeleteEUAByID request
+	DeleteEUAByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RetrieveEUAById request
-	RetrieveEUAById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// RetrieveEUAByID request
+	RetrieveEUAByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// AcceptEUAWithBody request with any body
 	AcceptEUAWithBody(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -821,11 +821,11 @@ type ClientInterface interface {
 
 	CreateRequisitionWithFormdataBody(ctx context.Context, body CreateRequisitionFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteRequisitionById request
-	DeleteRequisitionById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// DeleteRequisitionByID request
+	DeleteRequisitionByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RequisitionById request
-	RequisitionById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// RequisitionByID request
+	RequisitionByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ObtainNewAccessrefreshTokenPairWithBody request with any body
 	ObtainNewAccessrefreshTokenPairWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -950,8 +950,8 @@ func (c *Client) CreateEUAWithFormdataBody(ctx context.Context, body CreateEUAFo
 	return c.Client.Do(req)
 }
 
-func (c *Client) DeleteEUAById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteEUAByIdRequest(c.Server, id)
+func (c *Client) DeleteEUAByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteEUAByIDRequest(c.Server, id)
 	if err != nil {
 		return nil, err
 	}
@@ -962,8 +962,8 @@ func (c *Client) DeleteEUAById(ctx context.Context, id openapi_types.UUID, reqEd
 	return c.Client.Do(req)
 }
 
-func (c *Client) RetrieveEUAById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRetrieveEUAByIdRequest(c.Server, id)
+func (c *Client) RetrieveEUAByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewRetrieveEUAByIDRequest(c.Server, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1082,8 +1082,8 @@ func (c *Client) CreateRequisitionWithFormdataBody(ctx context.Context, body Cre
 	return c.Client.Do(req)
 }
 
-func (c *Client) DeleteRequisitionById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteRequisitionByIdRequest(c.Server, id)
+func (c *Client) DeleteRequisitionByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteRequisitionByIDRequest(c.Server, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1094,8 +1094,8 @@ func (c *Client) DeleteRequisitionById(ctx context.Context, id openapi_types.UUI
 	return c.Client.Do(req)
 }
 
-func (c *Client) RequisitionById(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRequisitionByIdRequest(c.Server, id)
+func (c *Client) RequisitionByID(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewRequisitionByIDRequest(c.Server, id)
 	if err != nil {
 		return nil, err
 	}
@@ -1556,8 +1556,8 @@ func NewCreateEUARequestWithBody(server string, contentType string, body io.Read
 	return req, nil
 }
 
-// NewDeleteEUAByIdRequest generates requests for DeleteEUAById
-func NewDeleteEUAByIdRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+// NewDeleteEUAByIDRequest generates requests for DeleteEUAByID
+func NewDeleteEUAByIDRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1590,8 +1590,8 @@ func NewDeleteEUAByIdRequest(server string, id openapi_types.UUID) (*http.Reques
 	return req, nil
 }
 
-// NewRetrieveEUAByIdRequest generates requests for RetrieveEUAById
-func NewRetrieveEUAByIdRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+// NewRetrieveEUAByIDRequest generates requests for RetrieveEUAByID
+func NewRetrieveEUAByIDRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -2057,8 +2057,8 @@ func NewCreateRequisitionRequestWithBody(server string, contentType string, body
 	return req, nil
 }
 
-// NewDeleteRequisitionByIdRequest generates requests for DeleteRequisitionById
-func NewDeleteRequisitionByIdRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+// NewDeleteRequisitionByIDRequest generates requests for DeleteRequisitionByID
+func NewDeleteRequisitionByIDRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -2091,8 +2091,8 @@ func NewDeleteRequisitionByIdRequest(server string, id openapi_types.UUID) (*htt
 	return req, nil
 }
 
-// NewRequisitionByIdRequest generates requests for RequisitionById
-func NewRequisitionByIdRequest(server string, id openapi_types.UUID) (*http.Request, error) {
+// NewRequisitionByIDRequest generates requests for RequisitionByID
+func NewRequisitionByIDRequest(server string, id openapi_types.UUID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -2295,11 +2295,11 @@ type ClientWithResponsesInterface interface {
 
 	CreateEUAWithFormdataBodyWithResponse(ctx context.Context, body CreateEUAFormdataRequestBody, reqEditors ...RequestEditorFn) (*CreateEUAResponse, error)
 
-	// DeleteEUAByIdWithResponse request
-	DeleteEUAByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteEUAByIdResponse, error)
+	// DeleteEUAByIDWithResponse request
+	DeleteEUAByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteEUAByIDResponse, error)
 
-	// RetrieveEUAByIdWithResponse request
-	RetrieveEUAByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RetrieveEUAByIdResponse, error)
+	// RetrieveEUAByIDWithResponse request
+	RetrieveEUAByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RetrieveEUAByIDResponse, error)
 
 	// AcceptEUAWithBodyWithResponse request with any body
 	AcceptEUAWithBodyWithResponse(ctx context.Context, id openapi_types.UUID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AcceptEUAResponse, error)
@@ -2324,11 +2324,11 @@ type ClientWithResponsesInterface interface {
 
 	CreateRequisitionWithFormdataBodyWithResponse(ctx context.Context, body CreateRequisitionFormdataRequestBody, reqEditors ...RequestEditorFn) (*CreateRequisitionResponse, error)
 
-	// DeleteRequisitionByIdWithResponse request
-	DeleteRequisitionByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteRequisitionByIdResponse, error)
+	// DeleteRequisitionByIDWithResponse request
+	DeleteRequisitionByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteRequisitionByIDResponse, error)
 
-	// RequisitionByIdWithResponse request
-	RequisitionByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RequisitionByIdResponse, error)
+	// RequisitionByIDWithResponse request
+	RequisitionByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RequisitionByIDResponse, error)
 
 	// ObtainNewAccessrefreshTokenPairWithBodyWithResponse request with any body
 	ObtainNewAccessrefreshTokenPairWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ObtainNewAccessrefreshTokenPairResponse, error)
@@ -2544,7 +2544,7 @@ func (r CreateEUAResponse) StatusCode() int {
 	return 0
 }
 
-type DeleteEUAByIdResponse struct {
+type DeleteEUAByIDResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON400      *ErrorResponse
@@ -2555,7 +2555,7 @@ type DeleteEUAByIdResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteEUAByIdResponse) Status() string {
+func (r DeleteEUAByIDResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2563,14 +2563,14 @@ func (r DeleteEUAByIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteEUAByIdResponse) StatusCode() int {
+func (r DeleteEUAByIDResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type RetrieveEUAByIdResponse struct {
+type RetrieveEUAByIDResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *EndUserAgreement
@@ -2582,7 +2582,7 @@ type RetrieveEUAByIdResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r RetrieveEUAByIdResponse) Status() string {
+func (r RetrieveEUAByIDResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2590,7 +2590,7 @@ func (r RetrieveEUAByIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r RetrieveEUAByIdResponse) StatusCode() int {
+func (r RetrieveEUAByIDResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2733,7 +2733,7 @@ func (r CreateRequisitionResponse) StatusCode() int {
 	return 0
 }
 
-type DeleteRequisitionByIdResponse struct {
+type DeleteRequisitionByIDResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON400      *ErrorResponse
@@ -2744,7 +2744,7 @@ type DeleteRequisitionByIdResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteRequisitionByIdResponse) Status() string {
+func (r DeleteRequisitionByIDResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2752,14 +2752,14 @@ func (r DeleteRequisitionByIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteRequisitionByIdResponse) StatusCode() int {
+func (r DeleteRequisitionByIDResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type RequisitionByIdResponse struct {
+type RequisitionByIDResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *Requisition
@@ -2771,7 +2771,7 @@ type RequisitionByIdResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r RequisitionByIdResponse) Status() string {
+func (r RequisitionByIDResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2779,7 +2779,7 @@ func (r RequisitionByIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r RequisitionByIdResponse) StatusCode() int {
+func (r RequisitionByIDResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2915,22 +2915,22 @@ func (c *ClientWithResponses) CreateEUAWithFormdataBodyWithResponse(ctx context.
 	return ParseCreateEUAResponse(rsp)
 }
 
-// DeleteEUAByIdWithResponse request returning *DeleteEUAByIdResponse
-func (c *ClientWithResponses) DeleteEUAByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteEUAByIdResponse, error) {
-	rsp, err := c.DeleteEUAById(ctx, id, reqEditors...)
+// DeleteEUAByIDWithResponse request returning *DeleteEUAByIDResponse
+func (c *ClientWithResponses) DeleteEUAByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteEUAByIDResponse, error) {
+	rsp, err := c.DeleteEUAByID(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteEUAByIdResponse(rsp)
+	return ParseDeleteEUAByIDResponse(rsp)
 }
 
-// RetrieveEUAByIdWithResponse request returning *RetrieveEUAByIdResponse
-func (c *ClientWithResponses) RetrieveEUAByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RetrieveEUAByIdResponse, error) {
-	rsp, err := c.RetrieveEUAById(ctx, id, reqEditors...)
+// RetrieveEUAByIDWithResponse request returning *RetrieveEUAByIDResponse
+func (c *ClientWithResponses) RetrieveEUAByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RetrieveEUAByIDResponse, error) {
+	rsp, err := c.RetrieveEUAByID(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseRetrieveEUAByIdResponse(rsp)
+	return ParseRetrieveEUAByIDResponse(rsp)
 }
 
 // AcceptEUAWithBodyWithResponse request with arbitrary body returning *AcceptEUAResponse
@@ -3010,22 +3010,22 @@ func (c *ClientWithResponses) CreateRequisitionWithFormdataBodyWithResponse(ctx 
 	return ParseCreateRequisitionResponse(rsp)
 }
 
-// DeleteRequisitionByIdWithResponse request returning *DeleteRequisitionByIdResponse
-func (c *ClientWithResponses) DeleteRequisitionByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteRequisitionByIdResponse, error) {
-	rsp, err := c.DeleteRequisitionById(ctx, id, reqEditors...)
+// DeleteRequisitionByIDWithResponse request returning *DeleteRequisitionByIDResponse
+func (c *ClientWithResponses) DeleteRequisitionByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteRequisitionByIDResponse, error) {
+	rsp, err := c.DeleteRequisitionByID(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteRequisitionByIdResponse(rsp)
+	return ParseDeleteRequisitionByIDResponse(rsp)
 }
 
-// RequisitionByIdWithResponse request returning *RequisitionByIdResponse
-func (c *ClientWithResponses) RequisitionByIdWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RequisitionByIdResponse, error) {
-	rsp, err := c.RequisitionById(ctx, id, reqEditors...)
+// RequisitionByIDWithResponse request returning *RequisitionByIDResponse
+func (c *ClientWithResponses) RequisitionByIDWithResponse(ctx context.Context, id openapi_types.UUID, reqEditors ...RequestEditorFn) (*RequisitionByIDResponse, error) {
+	rsp, err := c.RequisitionByID(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseRequisitionByIdResponse(rsp)
+	return ParseRequisitionByIDResponse(rsp)
 }
 
 // ObtainNewAccessrefreshTokenPairWithBodyWithResponse request with arbitrary body returning *ObtainNewAccessrefreshTokenPairResponse
@@ -3578,15 +3578,15 @@ func ParseCreateEUAResponse(rsp *http.Response) (*CreateEUAResponse, error) {
 	return response, nil
 }
 
-// ParseDeleteEUAByIdResponse parses an HTTP response from a DeleteEUAByIdWithResponse call
-func ParseDeleteEUAByIdResponse(rsp *http.Response) (*DeleteEUAByIdResponse, error) {
+// ParseDeleteEUAByIDResponse parses an HTTP response from a DeleteEUAByIDWithResponse call
+func ParseDeleteEUAByIDResponse(rsp *http.Response) (*DeleteEUAByIDResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteEUAByIdResponse{
+	response := &DeleteEUAByIDResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -3632,15 +3632,15 @@ func ParseDeleteEUAByIdResponse(rsp *http.Response) (*DeleteEUAByIdResponse, err
 	return response, nil
 }
 
-// ParseRetrieveEUAByIdResponse parses an HTTP response from a RetrieveEUAByIdWithResponse call
-func ParseRetrieveEUAByIdResponse(rsp *http.Response) (*RetrieveEUAByIdResponse, error) {
+// ParseRetrieveEUAByIDResponse parses an HTTP response from a RetrieveEUAByIDWithResponse call
+func ParseRetrieveEUAByIDResponse(rsp *http.Response) (*RetrieveEUAByIDResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &RetrieveEUAByIdResponse{
+	response := &RetrieveEUAByIDResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -4005,15 +4005,15 @@ func ParseCreateRequisitionResponse(rsp *http.Response) (*CreateRequisitionRespo
 	return response, nil
 }
 
-// ParseDeleteRequisitionByIdResponse parses an HTTP response from a DeleteRequisitionByIdWithResponse call
-func ParseDeleteRequisitionByIdResponse(rsp *http.Response) (*DeleteRequisitionByIdResponse, error) {
+// ParseDeleteRequisitionByIDResponse parses an HTTP response from a DeleteRequisitionByIDWithResponse call
+func ParseDeleteRequisitionByIDResponse(rsp *http.Response) (*DeleteRequisitionByIDResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteRequisitionByIdResponse{
+	response := &DeleteRequisitionByIDResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -4059,15 +4059,15 @@ func ParseDeleteRequisitionByIdResponse(rsp *http.Response) (*DeleteRequisitionB
 	return response, nil
 }
 
-// ParseRequisitionByIdResponse parses an HTTP response from a RequisitionByIdWithResponse call
-func ParseRequisitionByIdResponse(rsp *http.Response) (*RequisitionByIdResponse, error) {
+// ParseRequisitionByIDResponse parses an HTTP response from a RequisitionByIDWithResponse call
+func ParseRequisitionByIDResponse(rsp *http.Response) (*RequisitionByIDResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &RequisitionByIdResponse{
+	response := &RequisitionByIDResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -4239,10 +4239,10 @@ type ServerInterface interface {
 	CreateEUA(ctx echo.Context) error
 
 	// (DELETE /api/v2/agreements/enduser/{id}/)
-	DeleteEUAById(ctx echo.Context, id openapi_types.UUID) error
+	DeleteEUAByID(ctx echo.Context, id openapi_types.UUID) error
 
 	// (GET /api/v2/agreements/enduser/{id}/)
-	RetrieveEUAById(ctx echo.Context, id openapi_types.UUID) error
+	RetrieveEUAByID(ctx echo.Context, id openapi_types.UUID) error
 
 	// (PUT /api/v2/agreements/enduser/{id}/accept/)
 	AcceptEUA(ctx echo.Context, id openapi_types.UUID) error
@@ -4260,10 +4260,10 @@ type ServerInterface interface {
 	CreateRequisition(ctx echo.Context) error
 
 	// (DELETE /api/v2/requisitions/{id}/)
-	DeleteRequisitionById(ctx echo.Context, id openapi_types.UUID) error
+	DeleteRequisitionByID(ctx echo.Context, id openapi_types.UUID) error
 
 	// (GET /api/v2/requisitions/{id}/)
-	RequisitionById(ctx echo.Context, id openapi_types.UUID) error
+	RequisitionByID(ctx echo.Context, id openapi_types.UUID) error
 
 	// (POST /api/v2/token/new/)
 	ObtainNewAccessrefreshTokenPair(ctx echo.Context) error
@@ -4444,8 +4444,8 @@ func (w *ServerInterfaceWrapper) CreateEUA(ctx echo.Context) error {
 	return err
 }
 
-// DeleteEUAById converts echo context to params.
-func (w *ServerInterfaceWrapper) DeleteEUAById(ctx echo.Context) error {
+// DeleteEUAByID converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteEUAByID(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
 	var id openapi_types.UUID
@@ -4458,12 +4458,12 @@ func (w *ServerInterfaceWrapper) DeleteEUAById(ctx echo.Context) error {
 	ctx.Set(JwtAuthScopes, []string{})
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.DeleteEUAById(ctx, id)
+	err = w.Handler.DeleteEUAByID(ctx, id)
 	return err
 }
 
-// RetrieveEUAById converts echo context to params.
-func (w *ServerInterfaceWrapper) RetrieveEUAById(ctx echo.Context) error {
+// RetrieveEUAByID converts echo context to params.
+func (w *ServerInterfaceWrapper) RetrieveEUAByID(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
 	var id openapi_types.UUID
@@ -4476,7 +4476,7 @@ func (w *ServerInterfaceWrapper) RetrieveEUAById(ctx echo.Context) error {
 	ctx.Set(JwtAuthScopes, []string{})
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.RetrieveEUAById(ctx, id)
+	err = w.Handler.RetrieveEUAByID(ctx, id)
 	return err
 }
 
@@ -4651,8 +4651,8 @@ func (w *ServerInterfaceWrapper) CreateRequisition(ctx echo.Context) error {
 	return err
 }
 
-// DeleteRequisitionById converts echo context to params.
-func (w *ServerInterfaceWrapper) DeleteRequisitionById(ctx echo.Context) error {
+// DeleteRequisitionByID converts echo context to params.
+func (w *ServerInterfaceWrapper) DeleteRequisitionByID(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
 	var id openapi_types.UUID
@@ -4665,12 +4665,12 @@ func (w *ServerInterfaceWrapper) DeleteRequisitionById(ctx echo.Context) error {
 	ctx.Set(JwtAuthScopes, []string{})
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.DeleteRequisitionById(ctx, id)
+	err = w.Handler.DeleteRequisitionByID(ctx, id)
 	return err
 }
 
-// RequisitionById converts echo context to params.
-func (w *ServerInterfaceWrapper) RequisitionById(ctx echo.Context) error {
+// RequisitionByID converts echo context to params.
+func (w *ServerInterfaceWrapper) RequisitionByID(ctx echo.Context) error {
 	var err error
 	// ------------- Path parameter "id" -------------
 	var id openapi_types.UUID
@@ -4683,7 +4683,7 @@ func (w *ServerInterfaceWrapper) RequisitionById(ctx echo.Context) error {
 	ctx.Set(JwtAuthScopes, []string{})
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.RequisitionById(ctx, id)
+	err = w.Handler.RequisitionByID(ctx, id)
 	return err
 }
 
@@ -4744,15 +4744,15 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/api/v2/accounts/:id/transactions/", wrapper.RetrieveAccountTransactions)
 	router.GET(baseURL+"/api/v2/agreements/enduser/", wrapper.RetrieveAllEUAsForAnEndUser)
 	router.POST(baseURL+"/api/v2/agreements/enduser/", wrapper.CreateEUA)
-	router.DELETE(baseURL+"/api/v2/agreements/enduser/:id/", wrapper.DeleteEUAById)
-	router.GET(baseURL+"/api/v2/agreements/enduser/:id/", wrapper.RetrieveEUAById)
+	router.DELETE(baseURL+"/api/v2/agreements/enduser/:id/", wrapper.DeleteEUAByID)
+	router.GET(baseURL+"/api/v2/agreements/enduser/:id/", wrapper.RetrieveEUAByID)
 	router.PUT(baseURL+"/api/v2/agreements/enduser/:id/accept/", wrapper.AcceptEUA)
 	router.GET(baseURL+"/api/v2/institutions/", wrapper.RetrieveAllSupportedInstitutionsInAGivenCountry)
 	router.GET(baseURL+"/api/v2/institutions/:id/", wrapper.RetrieveInstitution)
 	router.GET(baseURL+"/api/v2/requisitions/", wrapper.RetrieveAllRequisitions)
 	router.POST(baseURL+"/api/v2/requisitions/", wrapper.CreateRequisition)
-	router.DELETE(baseURL+"/api/v2/requisitions/:id/", wrapper.DeleteRequisitionById)
-	router.GET(baseURL+"/api/v2/requisitions/:id/", wrapper.RequisitionById)
+	router.DELETE(baseURL+"/api/v2/requisitions/:id/", wrapper.DeleteRequisitionByID)
+	router.GET(baseURL+"/api/v2/requisitions/:id/", wrapper.RequisitionByID)
 	router.POST(baseURL+"/api/v2/token/new/", wrapper.ObtainNewAccessrefreshTokenPair)
 	router.POST(baseURL+"/api/v2/token/refresh/", wrapper.GetANewAccessToken)
 
@@ -4794,7 +4794,7 @@ var swaggerSpec = []string{
 	"mrloq7UXlS2dMQkDQidaMXOYMfP1rSrx4DJGmgqXjSfi4tScWwUjT1LjtNUwAOE2KVl1LvtzdE/d7dKa",
 	"lSw3V3hCqLxpFm8TF0SvgaIjwLjO4BOezaV2sX/w0qWKUviUh/OmQsz58e7uCNNb40KWet/OJPIxC0Lg",
 	"fMePZrt4TnbvDnbTywnfBa2L7f4nJDMiftrf29OX8Gg85iB+2svdSxlxmHEcFjm4I5G2kn2ZFDLgcShW",
-	"DyooWeBWiitIZ19uesLV0fAvTzzLKOFf2pQ/F23rTrY1W6vNs93AIdfTykzFctoE5PAMOYRgeX2NKjDG",
+	"DyooWeBWiitIZ19uesLV0fAvTzzLKOFf2pQ/F23rTrY1W6vNs93AIDfTykzFctoE5PAMOYRgeX2NKjDG",
 	"IYeS5X6e3MGBygFII4tSHOiOwH3NdcRyY+NKT4piXIX6pdFkPL1L6oAwQhFGypyRmsesybS9AEUTV3KJ",
 	"wjWOmopwu8yuUG0X79y03cFrefJKVDkiBh5rubR6WslkuaqRfDUT5lKT4gZNhv3cmDo9dnn9NhEP0WiH",
 	"RiwgE6BKHsx5cLDLBWZi9+UYvzkcH73aPny9/3r71eHRwfbo5djfPvDfHr0cHx3hMT7a/fyi2xtcd69v",
@@ -4874,7 +4874,7 @@ var swaggerSpec = []string{
 	"cN29vrnuXvaG3bMtNfC2ST61YM+w8KfKf0tySNDWi85Ne1jAk6opc9116sMmJQocrSvmIE89KtAuBb9r",
 	"LqxW686GRaxzPmyCqmbEwjEkQW5azqHIE9dyfddqxHf/o8wrbPHT5xcqMLH/5/D08qzz4BTrjxuj9/jT",
 	"z4SLiBEfh4/Z5jP8aThNMVRv8vf4E8rg6re4A2d+gzsA6rd37+Bo2LsenJx1TvZtC9pQRCJB8MPrl3s/",
-	"VixAF0VuEbA59XklIdFYQjZtCTlYczCv8CJRmLWOXBzPdwwAxRxPai+XBg1K8bgGtBZVfjgPapFvckSr",
+	"VixAF0VuEbA59XklIDFYQjZtCTlYczCv8CJRmLWOXBzPdwwAxRxPai+XBg1K8bgGtBZVfjgPapFvckSr",
 	"iWosS/+uZamxmnw3VpN6/0v69dwAQhBQns0zVY7Me4/CvbpoS9HAnZv2yaIbLHO0LHkBV+4u9W6s9exu",
 	"3edz6xsKTjGlkUh5dzhCFQDSQ7wsOLIArOxSDtdoDkrKkbkUSGXcx0hr02c76JKGC0TN3VWBZwsC+ZhK",
 	"HUkjDJa8Y1nK0IqvcdZ7hXPw+uD1m8PgcDuAV4fbr2A82sZ4H2+P3+wfvh6P8dtXxcc56lHOim9ynilN",
@@ -4892,7 +4892,7 @@ var swaggerSpec = []string{
 	"NsN0kYdNCi2KFRHnDKCI15RloOcK788xnSgAGzYptKbjRgJ3fSgzlxRmwN2BAmYuYFYCVhR3BQ4LROgi",
 	"C1AtzQss7opzYcoy0IvfFCgBfyqAcgGEFlrkqqyGXd1QTGNcmvKs2GqgiYo/wWwUxWxSaJGVW03UUL7H",
 	"oSjg10UZ4HuFu6ceiMlBK+wDuyJr1LtQjSJ2jwvjacos0EsJehWVZ8mUZaBXFxqUiXiCwyKwKbXAFeX9",
-	"aFYexKQwA+4rMgZhdIdvi9BpaQY++DUBB+oChzz2gZrRwRwXl4AusravWrSDezC5RS1IXWbhVEv2hhIB",
+	"aFYexKQwA+4rMgZhdIDvi9BpaQY++DUBB+oChzz2gZrRwRwXl4AusravWrSDezC5RS1IXWbhVEv2hhIB",
 	"wa+EToKoICp1FUrqrD13UnM4JHrtpo7CuQlm5/EosbXU6H0m9H2QAlechAbrMMP6iJNwCZINj0C9CmAY",
 	"5x0qLylubvkQTO2aHNoNN8aV/oJALsFNPYe6gf0hi6rJ1ZBDG/VjpncZmo0NBVO5vVfT9a408BJNz6B8",
 	"ip5Xi2JTrDPAAWIwjmlg5yeuYr4POOgr6DTNoZN9iXao0Q7T+9naI7AMy6YGgXOK7ux82TUjMODUzkhd",

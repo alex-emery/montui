@@ -4,6 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//nolint:gochecknoglobals
 var rulesMap = map[string]string{
 	"ADOBESYSTEM":                  "Other",
 	"AMAZON PRIME":                 "Other",
@@ -47,9 +48,10 @@ type ruleStore struct {
 
 var _ RuleGetter = &ruleStore{}
 
-func (s *ruleStore) Get(name string) (*Rule, error) {
+func (s *ruleStore) Get(_ string) (*Rule, error) {
 	rule := &Rule{}
 	result := s.db.First(rule)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -60,10 +62,10 @@ func (s *ruleStore) Get(name string) (*Rule, error) {
 func (s *ruleStore) List() ([]Rule, error) {
 	var rules []Rule
 	res := s.db.Find(&rules)
+
 	if res.Error != nil {
 		return nil, res.Error
 	}
 
 	return rules, nil
-
 }

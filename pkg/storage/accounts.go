@@ -39,5 +39,4 @@ func (s *accountStore) Delete(ids ...uuid.UUID) error {
 	res := s.db.Delete(accounts)
 
 	return res.Error
-
 }

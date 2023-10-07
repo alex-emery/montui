@@ -50,6 +50,7 @@ func TestTransactions(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	if *found.CategoryID != category.ID {
 		t.Fatal(fmt.Errorf("failed to update transaction with category"))
 	}

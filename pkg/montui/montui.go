@@ -18,18 +18,19 @@ type Montui struct {
 	classify *categorise.Categorise
 }
 
-func New(nordigenSecretId, nordigenSecretKey, dir string) (*Montui, error) {
+func New(nordigenSecretID, nordigenSecretKey, dir string) (*Montui, error) {
 	store, err := storage.New(dir)
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := nordigen.New(nordigenSecretId, nordigenSecretKey)
+	client, err := nordigen.New(nordigenSecretID, nordigenSecretKey)
 	if err != nil {
 		return nil, err
 	}
 
 	classify := categorise.New(store)
+
 	return &Montui{store: store, client: client, classify: classify}, nil
 }
 
@@ -39,7 +40,7 @@ func (s *Montui) GetAccounts() ([]storage.Account, error) {
 
 // Attempts to fetch transactions from nordigen and
 // store them in the DB.
-func (s *Montui) FetchTransactions(ctx context.Context, accountId string, dateTo, dateFrom *string) ([]*storage.Transaction, error) {
+func (s *Montui) FetchTransactions(ctx context.Context, accountID string, dateTo, dateFrom *string) ([]*storage.Transaction, error) {
 	// get all accounts
 	accounts, err := s.store.Accounts().List()
 	if err != nil {
@@ -61,20 +62,23 @@ func (s *Montui) FetchTransactions(ctx context.Context, accountId string, dateTo
 		}
 
 		finalised := make([]*storage.Transaction, 0, len(transactions.Booked))
+
 		var latest time.Time
+
 		for _, transaction := range transactions.Booked {
 			dbTransaction := &storage.Transaction{
 				AccountID:             account.ID,
-				InternalTransactionID: safe(transaction.TransactionId),
+				InternalTransactionID: safe(transaction.TransactionID),
 				Name:                  safe(transaction.CreditorName),
 				Date:                  safe(transaction.BookingDate),
 				Description:           safe(transaction.RemittanceInformationUnstructured),
 				Amount:                transaction.TransactionAmount.Amount,
 			}
 
-			s.classify.Categorise(ctx, dbTransaction)
+			s.classify.Categorise(dbTransaction) //nolint:errcheck
+
 			if dbTransaction.CategoryID != nil {
-				s.store.Transactions().SetCategory(dbTransaction.ID, *dbTransaction.CategoryID)
+				s.store.Transactions().SetCategory(dbTransaction.ID, *dbTransaction.CategoryID) //nolint:errcheck
 			}
 
 			finalised = append(finalised, dbTransaction)
@@ -84,26 +88,26 @@ func (s *Montui) FetchTransactions(ctx context.Context, accountId string, dateTo
 			if parsedBookingDate.After(latest) {
 				latest = parsedBookingDate
 			}
-
 		}
 
 		err = s.store.Transactions().Insert(finalised...)
 		if err != nil && !errors.Is(err, storage.ErrUniqueConstraintFailed) {
-			return s.GetTransactions(ctx, accountId, dateTo, dateFrom)
+			return s.GetTransactions(accountID, dateTo, dateFrom)
 		}
 
 		account.LastFetch = &latest
 		err = s.store.Accounts().Insert(account)
+
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return s.GetTransactions(ctx, accountId, dateTo, dateFrom)
+	return s.GetTransactions(accountID, dateTo, dateFrom)
 }
 
 // Fetches transactions from storage.
-func (s *Montui) GetTransactions(ctx context.Context, accountId string, dateTo, dateFrom *string) ([]*storage.Transaction, error) {
+func (s *Montui) GetTransactions(accountID string, dateTo, dateFrom *string) ([]*storage.Transaction, error) { //nolint:revive //these are in TODO
 	return s.store.Transactions().List()
 }
 
@@ -134,23 +138,26 @@ func (s *Montui) ListBanks() ([]nordigen.Integration, error) {
 func (s *Montui) Link(ctx context.Context, institutionID string) error {
 	ref := uuid.New()
 	req, err := s.client.InitiateRequsition(ctx, ref.String(), nil, institutionID)
+
 	if err != nil {
 		return err
 	}
 
-	browser.OpenURL(*req.Link)
+	_ = browser.OpenURL(*req.Link) //TODO: expose the link to the user without relying on this.
+
 	err = nordigen.WaitForRedirect(ref)
 	if err != nil {
 		return err
 	}
 
-	requisition := storage.Requisition{ID: *req.Id}
+	requisition := storage.Requisition{ID: *req.ID}
+
 	err = s.store.Requisitions().Insert(requisition)
 	if err != nil {
 		return err
 	}
 
-	accounts, err := s.client.GetAccounts(ctx, *req.Id)
+	accounts, err := s.client.GetAccounts(ctx, *req.ID)
 	if err != nil {
 		return err
 	}
@@ -159,54 +166,7 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 		requisition.Accounts = append(requisition.Accounts,
 			storage.Account{
 				ID:           account,
-				RequsitionID: *req.Id,
-			})
-	}
-
-	err = s.store.Requisitions().Update(requisition)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-func (s *Montui) Auth() error {
-	ref := uuid.New()
-	ctx := context.Background()
-	institutionID := "AMERICAN_EXPRESS_AESUGB21"
-	agreementID, err := s.client.CreateAgreement(ctx, institutionID)
-	if err != nil {
-		return err
-	}
-
-	req, err := s.client.InitiateRequsition(ctx, ref.String(), agreementID, institutionID)
-	if err != nil {
-		return err
-	}
-
-	browser.OpenURL(*req.Link)
-
-	err = nordigen.WaitForRedirect(ref)
-	if err != nil {
-		return err
-	}
-
-	requisition := storage.Requisition{ID: *req.Id}
-	err = s.store.Requisitions().Insert(requisition)
-	if err != nil {
-		return err
-	}
-
-	accounts, err := s.client.GetAccounts(ctx, *req.Id)
-	if err != nil {
-		return err
-	}
-
-	for _, account := range accounts {
-		requisition.Accounts = append(requisition.Accounts,
-			storage.Account{
-				ID:           account,
-				RequsitionID: *req.Id,
+				RequsitionID: *req.ID,
 			})
 	}
 

@@ -15,9 +15,10 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	secretId := os.Getenv("SECRET_ID")
+	secretID := os.Getenv("SECRET_ID")
 	secretKey := os.Getenv("SECRET_KEY")
-	montui, err := montui.New(secretId, secretKey, "./sqlite.db")
+	montui, err := montui.New(secretID, secretKey, "./sqlite.db")
+
 	if err != nil {
 		log.Fatal("failed to create montui")
 	}
@@ -27,6 +28,8 @@ func main() {
 		log.Fatal("failed to start", err)
 	}
 
-	ui.Run(tui)
-
+	err = ui.Run(tui)
+	if err != nil {
+		log.Fatal("failed to run", err)
+	}
 }

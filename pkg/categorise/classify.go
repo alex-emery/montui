@@ -1,8 +1,6 @@
 package categorise
 
 import (
-	"context"
-
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 )
@@ -20,7 +18,7 @@ func New(storage storage.Storage) *Categorise {
 // Goes through every "rule" and tries to substring match it
 // to the transaction.
 // TODO: set the category to other by default.
-func (c *Categorise) Categorise(ctx context.Context, transactions ...*storage.Transaction) error {
+func (c *Categorise) Categorise(transactions ...*storage.Transaction) error {
 	if len(transactions) == 0 {
 		return nil
 	}
@@ -33,7 +31,9 @@ func (c *Categorise) Categorise(ctx context.Context, transactions ...*storage.Tr
 	for i := range transactions {
 		for _, rule := range rules {
 			if fuzzy.MatchFold(rule.Pattern, transactions[i].Description) {
-				transactions[i].CategoryID = &rule.CategoryID
+				categoryID := rule.CategoryID
+				transactions[i].CategoryID = &categoryID
+
 				break
 			}
 		}

@@ -2,6 +2,7 @@ package storage
 
 import "gorm.io/gorm"
 
+//nolint:gochecknoglobals
 var categoryList = []string{
 	"Groceries",
 	"Dining",
@@ -20,6 +21,7 @@ var _ CategoryGetter = &categoryStore{}
 
 func (c *categoryStore) Get(name string) (*Category, error) {
 	category := &Category{}
+
 	result := c.db.Where("name = ?", name).First(category)
 	if result.Error != nil {
 		return nil, result.Error
@@ -30,6 +32,7 @@ func (c *categoryStore) Get(name string) (*Category, error) {
 
 func (c *categoryStore) Where(query interface{}, args ...interface{}) ([]Category, error) {
 	categories := []Category{}
+
 	result := c.db.Where(query, args).Find(&categories)
 	if result.Error != nil {
 		return nil, result.Error
@@ -40,6 +43,7 @@ func (c *categoryStore) Where(query interface{}, args ...interface{}) ([]Categor
 
 func (c *categoryStore) List() ([]Category, error) {
 	categories := []Category{}
+
 	result := c.db.Find(&categories)
 	if result.Error != nil {
 		return nil, result.Error
@@ -50,5 +54,6 @@ func (c *categoryStore) List() ([]Category, error) {
 
 func (c *categoryStore) Update(category Category) error {
 	res := c.db.Save(&category)
+
 	return res.Error
 }

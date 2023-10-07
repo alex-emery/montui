@@ -11,7 +11,7 @@ type LinkModel struct {
 }
 
 func (m LinkModel) Init() tea.Cmd {
-	return app.CreateLink(m.bank.Id)
+	return app.CreateLink(m.bank.ID)
 }
 
 func (m LinkModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

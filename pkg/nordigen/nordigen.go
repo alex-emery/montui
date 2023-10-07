@@ -26,23 +26,18 @@ type TokenStore struct {
 
 const baseURL = "https://bankaccountdata.gocardless.com"
 
-func newTokenStore(secretId, secretKey string) (*TokenStore, error) {
-	client, err := NewClient(baseURL)
+func newTokenStore(secretID, secretKey string) (*TokenStore, error) {
+	client, err := NewClientWithResponses(baseURL)
 	if err != nil {
 		return nil, err
 	}
 
-	body := JWTObtainPairRequest{
-		SecretId:  secretId,
+	req := JWTObtainPairRequest{
+		SecretID:  secretID,
 		SecretKey: secretKey,
 	}
 
-	res, err := client.ObtainNewAccessrefreshTokenPair(context.Background(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	tokenRes, err := ParseObtainNewAccessrefreshTokenPairResponse(res)
+	tokenRes, err := client.ObtainNewAccessrefreshTokenPairWithResponse(context.Background(), req)
 	if err != nil {
 		return nil, err
 	}
@@ -59,18 +54,16 @@ func newTokenStore(secretId, secretKey string) (*TokenStore, error) {
 		refreshToken:  *tokens.Refresh,
 		refreshExpiry: *tokens.RefreshExpires,
 	}, nil
-
 }
 
-func (tokens *TokenStore) authProvider(ctx context.Context, req *http.Request) error {
+func (tokens *TokenStore) authProvider(_ context.Context, req *http.Request) error {
 	// we need to calculate if access token has expired and auth here
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", tokens.accessToken))
 	return nil
 }
 
-func New(secretId, secretKey string) (*Nordigen, error) {
-
-	tokens, err := newTokenStore(secretId, secretKey)
+func New(secretID, secretKey string) (*Nordigen, error) {
+	tokens, err := newTokenStore(secretID, secretKey)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +104,7 @@ func (c *Nordigen) CreateAgreement(ctx context.Context, institutionID string) (*
 	accessValidForDays := 30
 
 	acceptEUARes, err := c.client.CreateEUAWithResponse(ctx, EndUserAgreementRequest{
-		InstitutionId:      institutionID,
+		InstitutionID:      institutionID,
 		AccessScope:        &scopes,
 		MaxHistoricalDays:  &historicalDays,
 		AccessValidForDays: &accessValidForDays,
@@ -124,7 +117,7 @@ func (c *Nordigen) CreateAgreement(ctx context.Context, institutionID string) (*
 		return nil, fmt.Errorf("invalid status code %d", acceptEUARes.StatusCode())
 	}
 
-	return acceptEUARes.JSON201.Id, nil
+	return acceptEUARes.JSON201.ID, nil
 }
 
 func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreementID *uuid.UUID, instituteID string) (*SpectacularRequisition, error) {
@@ -134,7 +127,8 @@ func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreement
 
 	reqResp, err := c.client.CreateRequisitionWithFormdataBodyWithResponse(ctx, CreateRequisitionFormdataRequestBody{
 		Redirect:          &hostRedirect,
-		InstitutionId:     instituteID,
+		InstitutionID:     instituteID,
+		Agreement:         agreementID,
 		Reference:         &ref,
 		UserLanguage:      &lang,
 		RedirectImmediate: &redirect,
@@ -151,20 +145,20 @@ func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreement
 	return reqResp.JSON201, nil
 }
 
-func (c *Nordigen) GetAccounts(ctx context.Context, reqId uuid.UUID) ([]uuid.UUID, error) {
-	reqIdResp, err := c.client.RequisitionByIdWithResponse(ctx, reqId)
+func (c *Nordigen) GetAccounts(ctx context.Context, reqID uuid.UUID) ([]uuid.UUID, error) {
+	reqIDResp, err := c.client.RequisitionByIDWithResponse(ctx, reqID)
 	if err != nil {
 		return nil, err
 	}
 
-	if reqIdResp.JSON200 == nil {
+	if reqIDResp.JSON200 == nil {
 		return nil, fmt.Errorf("unexpected status code")
 	}
 
-	return *reqIdResp.JSON200.Accounts, nil
-
+	return *reqIDResp.JSON200.Accounts, nil
 }
-func WaitForRedirect(ref uuid.UUID) error {
+
+func WaitForRedirect(_ uuid.UUID) error {
 	shutdown := make(chan interface{}, 1)
 	handleRequest := func(w http.ResponseWriter, r *http.Request) {
 		// incoming := r.URL.Query().Get("ref")
@@ -173,33 +167,36 @@ func WaitForRedirect(ref uuid.UUID) error {
 	}
 
 	server := &http.Server{Addr: ":3000", Handler: http.HandlerFunc(handleRequest)}
-	go server.ListenAndServe()
+	go server.ListenAndServe() //nolint: errcheck
 
 	<-shutdown
-	server.Shutdown(context.Background())
+	server.Shutdown(context.Background()) //nolint: errcheck
+
 	return nil
 }
 
-func (c *Nordigen) GetTransactions(ctx context.Context, accountId string, dateFrom, dateTo *time.Time) (*BankTransactionStatusSchema, error) {
-
+func (c *Nordigen) GetTransactions(ctx context.Context, accountID string, dateFrom, dateTo *time.Time) (*BankTransactionStatusSchema, error) {
 	options := RetrieveAccountTransactionsParams{}
 	if dateFrom != nil {
 		options.DateFrom = &types.Date{Time: *dateFrom}
 	}
 
-	res, err := c.client.RetrieveAccountTransactionsWithResponse(ctx, uuid.MustParse(accountId), &options)
+	if dateTo != nil {
+		options.DateTo = &types.Date{Time: *dateTo}
+	}
+
+	res, err := c.client.RetrieveAccountTransactionsWithResponse(ctx, uuid.MustParse(accountID), &options)
 	if err != nil {
 		return nil, err
 	}
 
 	return res.JSON200, nil
-
 }
 
 func FakeData(path string) (*BankTransactionStatusSchema, error) {
 	f, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open transaction file %v", err)
+		return nil, fmt.Errorf("failed to open transaction file %w", err)
 	}
 
 	responseStruct := struct {
@@ -208,7 +205,7 @@ func FakeData(path string) (*BankTransactionStatusSchema, error) {
 
 	err = json.Unmarshal(f, &responseStruct)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal transactions %v", err)
+		return nil, fmt.Errorf("failed to unmarshal transactions %w", err)
 	}
 
 	return responseStruct.Transactions, nil

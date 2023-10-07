@@ -29,7 +29,7 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 
 	case GetTransactionsMsg:
 		return Future(func(channel chan tea.Msg) {
-			transactions, _ := c.montui.GetTransactions(context.Background(), "", nil, nil)
+			transactions, _ := c.montui.GetTransactions("", nil, nil)
 			channel <- NewTransactionsMsg{Transactions: transactions}
 		})
 

@@ -18,7 +18,6 @@ func (mc *mockClient) Do(req *http.Request) (*http.Response, error) {
 	return mc.DoFunc(req)
 }
 func TestBasic(t *testing.T) {
-
 	mc := &mockClient{}
 
 	file, err := os.ReadFile("./testdata/transactions")
@@ -32,15 +31,17 @@ func TestBasic(t *testing.T) {
 			Body:       io.NopCloser(bytes.NewReader(file)),
 		}, nil
 	}
+
 	client := ClientWithResponses{
 		ClientInterface: &Client{
 			Client: mc,
 		},
 	}
 
-	accountId := os.Getenv("ACCOUNT_ID")
+	accountID := os.Getenv("ACCOUNT_ID")
 	nordigen := Nordigen{client: &client}
-	transactions, err := nordigen.GetTransactions(context.Background(), accountId, nil, nil)
+
+	transactions, err := nordigen.GetTransactions(context.Background(), accountID, nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

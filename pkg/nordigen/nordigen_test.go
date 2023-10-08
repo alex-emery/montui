@@ -3,11 +3,13 @@ package nordigen
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
 type mockClient struct {
@@ -17,18 +19,30 @@ type mockClient struct {
 func (mc *mockClient) Do(req *http.Request) (*http.Response, error) {
 	return mc.DoFunc(req)
 }
+
 func TestBasic(t *testing.T) {
 	mc := &mockClient{}
 
-	file, err := os.ReadFile("./testdata/transactions")
+	mockResponse := BankTransactionStatusSchema{
+		Transactions: BankTransactionStatusSchemaTransactions{
+			Booked: []TransactionSchema{
+				{
+					RemittanceInformationUnstructured: func(a string) *string { return &a }("test 123"),
+				},
+			},
+		},
+	}
+
+	responseBytes, err := json.Marshal(mockResponse)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal("failed to marshal mock response")
 	}
 
 	mc.DoFunc = func(req *http.Request) (*http.Response, error) {
 		return &http.Response{
 			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(bytes.NewReader(file)),
+			Body:       io.NopCloser(bytes.NewReader(responseBytes)),
+			Header:     map[string][]string{"Content-Type": {"application/json"}},
 		}, nil
 	}
 
@@ -38,7 +52,7 @@ func TestBasic(t *testing.T) {
 		},
 	}
 
-	accountID := os.Getenv("ACCOUNT_ID")
+	accountID := uuid.New().String()
 	nordigen := Nordigen{client: &client}
 
 	transactions, err := nordigen.GetTransactions(context.Background(), accountID, nil, nil)

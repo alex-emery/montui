@@ -54,7 +54,7 @@ func CreateLink(bankID string) tea.Cmd {
 	}
 }
 
-func UpdateCategory(category storage.Category) tea.Cmd {
+func UpdateCategory(category *storage.Category) tea.Cmd {
 	return func() tea.Msg {
 		return UpdateCategoryMsg{Category: category}
 	}

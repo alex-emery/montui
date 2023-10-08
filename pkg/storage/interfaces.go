@@ -10,35 +10,38 @@ type Storage interface {
 	Accounts() AccountGetter
 }
 
+// use pointers so defaulting will update the model
+
 type RequsitionGetter interface {
-	Insert(...Requisition) error
-	List() ([]Requisition, error)
+	Insert(...*Requisition) error
+	List() ([]*Requisition, error)
 	Delete(...uuid.UUID) error
-	Update(...Requisition) error
+	Update(...*Requisition) error
 }
 
 type AccountGetter interface {
-	Insert(...Account) error
-	List() ([]Account, error)
+	Insert(...*Account) error
+	List() ([]*Account, error)
 	Delete(...uuid.UUID) error
 }
 
 type TransactionGetter interface {
 	Insert(...*Transaction) error
-	Get(id uint) (*Transaction, error)
+	Get(*Transaction) error
 	List() ([]*Transaction, error)
 	Update(*Transaction) error
 	SetCategory(transactionID uint, categoryID uint) error
 }
 
 type CategoryGetter interface {
-	Get(name string) (*Category, error)
-	List() ([]Category, error)
-	Where(query interface{}, args ...interface{}) ([]Category, error) // not used.
-	Update(category Category) error
+	Get(*Category) error
+	List() ([]*Category, error)
+	Update(category *Category) error
 }
 
 type RuleGetter interface {
-	Get(name string) (*Rule, error)
-	List() ([]Rule, error)
+	Insert(...*Rule) error
+	Get(*Rule) error
+	List() ([]*Rule, error)
+	Update(*Rule) error
 }

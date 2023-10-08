@@ -8,7 +8,7 @@ import (
 )
 
 type Accounts struct {
-	accounts []storage.Account
+	accounts []*storage.Account
 	workflow tea.Model
 	width    int
 	height   int

@@ -10,6 +10,7 @@ import (
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/google/uuid"
 	"github.com/pkg/browser"
+	"gorm.io/gorm"
 )
 
 type Montui struct {
@@ -34,7 +35,7 @@ func New(nordigenSecretID, nordigenSecretKey, dir string) (*Montui, error) {
 	return &Montui{store: store, client: client, classify: classify}, nil
 }
 
-func (s *Montui) GetAccounts() ([]storage.Account, error) {
+func (s *Montui) GetAccounts() ([]*storage.Account, error) {
 	return s.store.Accounts().List()
 }
 
@@ -112,22 +113,30 @@ func (s *Montui) GetTransactions(accountID string, dateTo, dateFrom *string) ([]
 }
 
 // Fetches categories from storage.
-func (s *Montui) GetCategories() ([]storage.Category, error) {
+func (s *Montui) GetCategories() ([]*storage.Category, error) {
 	return s.store.Categories().List()
 }
 
 // Sets the category for a specific transaction.
 func (s *Montui) SetCategory(transactionID uint, categoryID uint) (*storage.Transaction, error) {
-	err := s.store.Transactions().SetCategory(transactionID, categoryID)
+	transaction := &storage.Transaction{
+		Model: gorm.Model{
+			ID: transactionID,
+		},
+		CategoryID: &categoryID,
+	}
+
+	err := s.store.Transactions().Update(transaction)
+	// err := s.store.Transactions().SetCategory(transactionID, categoryID)
 	if err != nil {
 		return nil, err
 	}
 
 	// and get the update so we populate the category field
-	return s.store.Transactions().Get(transactionID)
+	return transaction, nil
 }
 
-func (s *Montui) UpdateCategory(category storage.Category) error {
+func (s *Montui) UpdateCategory(category *storage.Category) error {
 	return s.store.Categories().Update(category)
 }
 
@@ -152,7 +161,7 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 
 	requisition := storage.Requisition{ID: *req.Id}
 
-	err = s.store.Requisitions().Insert(requisition)
+	err = s.store.Requisitions().Insert(&requisition)
 	if err != nil {
 		return err
 	}
@@ -170,7 +179,7 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 			})
 	}
 
-	err = s.store.Requisitions().Update(requisition)
+	err = s.store.Requisitions().Update(&requisition)
 	if err != nil {
 		return err
 	}

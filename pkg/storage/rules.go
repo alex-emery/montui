@@ -48,19 +48,13 @@ type ruleStore struct {
 
 var _ RuleGetter = &ruleStore{}
 
-func (s *ruleStore) Get(_ string) (*Rule, error) {
-	rule := &Rule{}
-	result := s.db.First(rule)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return rule, nil
+func (s *ruleStore) Get(rule *Rule) error {
+	result := s.db.First(&rule)
+	return result.Error
 }
 
-func (s *ruleStore) List() ([]Rule, error) {
-	var rules []Rule
+func (s *ruleStore) List() ([]*Rule, error) {
+	var rules []*Rule
 	res := s.db.Find(&rules)
 
 	if res.Error != nil {
@@ -68,4 +62,15 @@ func (s *ruleStore) List() ([]Rule, error) {
 	}
 
 	return rules, nil
+}
+
+func (s *ruleStore) Insert(rules ...*Rule) error {
+	result := s.db.Create(rules)
+	return result.Error
+}
+
+func (s *ruleStore) Update(rule *Rule) error {
+	result := s.db.Save(rule)
+
+	return result.Error
 }

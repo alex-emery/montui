@@ -11,14 +11,14 @@ type requisitionStore struct {
 
 var _ RequsitionGetter = &requisitionStore{}
 
-func (s *requisitionStore) Insert(requisitions ...Requisition) error {
+func (s *requisitionStore) Insert(requisitions ...*Requisition) error {
 	res := s.db.Save(requisitions)
 
 	return res.Error
 }
 
-func (s *requisitionStore) List() ([]Requisition, error) {
-	requisitions := []Requisition{}
+func (s *requisitionStore) List() ([]*Requisition, error) {
+	requisitions := []*Requisition{}
 	result := s.db.Preload("Accounts").Find(&requisitions)
 
 	if result.Error != nil {
@@ -28,7 +28,7 @@ func (s *requisitionStore) List() ([]Requisition, error) {
 	return requisitions, nil
 }
 
-func (s *requisitionStore) Update(requsition ...Requisition) error {
+func (s *requisitionStore) Update(requsition ...*Requisition) error {
 	result := s.db.Save(requsition)
 
 	return result.Error

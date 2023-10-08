@@ -11,7 +11,7 @@ import (
 type categoryPicker struct {
 	height     int
 	width      int
-	categories []storage.Category
+	categories []*storage.Category
 	cursor     int
 }
 

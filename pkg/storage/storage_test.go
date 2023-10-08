@@ -6,6 +6,7 @@ import (
 
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func TestTransactions(t *testing.T) {
@@ -25,33 +26,43 @@ func TestTransactions(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	found, err := store.Transactions().Get(transaction.ID)
+	insertedTransaction := storage.Transaction{
+		Model: gorm.Model{
+			ID: transaction.ID,
+		},
+	}
+	err = store.Transactions().Get(&insertedTransaction)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if found.Description != "AMAZON PRIME" {
-		t.Fatal(fmt.Errorf("model is empty %v", found))
+	if insertedTransaction.Description != "AMAZON PRIME" {
+		t.Fatal(fmt.Errorf("model is empty %v", insertedTransaction))
 	}
 
-	category, err := store.Categories().Get("Shopping")
+	category := storage.Category{
+		Name: "Shopping",
+	}
+
+	err = store.Categories().Get(&category)
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	// update transaction with category
-	transaction.CategoryID = &category.ID
+	insertedTransaction.CategoryID = &category.ID
 
-	err = store.Transactions().Update(&transaction)
+	err = store.Transactions().Update(&insertedTransaction)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	found, err = store.Transactions().Get(transaction.ID)
+	err = store.Transactions().Get(&insertedTransaction)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if *found.CategoryID != category.ID {
+	if *insertedTransaction.CategoryID != category.ID {
 		t.Fatal(fmt.Errorf("failed to update transaction with category"))
 	}
 }
@@ -62,7 +73,7 @@ func TestAccountsAndReqs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	accounts := []storage.Account{
+	accounts := []*storage.Account{
 		{
 			ID: uuid.New(),
 		},
@@ -86,7 +97,7 @@ func TestAccountsAndReqs(t *testing.T) {
 
 	err = store.Accounts().Delete(accounts[0].ID)
 	if err != nil {
-		t.Fatalf("unexpected error whislt deleting account. %v", err)
+		t.Fatalf("unexpected error whilst deleting account. %v", err)
 	}
 
 	found, _ = store.Accounts().List()
@@ -106,7 +117,7 @@ func TestAccountsAndReqs(t *testing.T) {
 		},
 	}
 
-	err = store.Requisitions().Insert(newReq)
+	err = store.Requisitions().Insert(&newReq)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -123,7 +134,7 @@ func TestRequisitions(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	reqs := []storage.Requisition{
+	reqs := []*storage.Requisition{
 		{
 			ID: uuid.New(),
 		},

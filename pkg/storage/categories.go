@@ -19,30 +19,13 @@ type categoryStore struct {
 
 var _ CategoryGetter = &categoryStore{}
 
-func (c *categoryStore) Get(name string) (*Category, error) {
-	category := &Category{}
-
-	result := c.db.Where("name = ?", name).First(category)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return category, nil
+func (c *categoryStore) Get(category *Category) error {
+	result := c.db.Where(&category).First(category)
+	return result.Error
 }
 
-func (c *categoryStore) Where(query interface{}, args ...interface{}) ([]Category, error) {
-	categories := []Category{}
-
-	result := c.db.Where(query, args).Find(&categories)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return categories, nil
-}
-
-func (c *categoryStore) List() ([]Category, error) {
-	categories := []Category{}
+func (c *categoryStore) List() ([]*Category, error) {
+	categories := []*Category{}
 
 	result := c.db.Find(&categories)
 	if result.Error != nil {
@@ -52,7 +35,7 @@ func (c *categoryStore) List() ([]Category, error) {
 	return categories, nil
 }
 
-func (c *categoryStore) Update(category Category) error {
+func (c *categoryStore) Update(category *Category) error {
 	res := c.db.Save(&category)
 
 	return res.Error

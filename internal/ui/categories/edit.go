@@ -39,7 +39,7 @@ func (m categoryEditModel) Update(msg tea.Msg) (categoryEditModel, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter":
-			return m, app.UpdateCategory(storage.Category{Model: gorm.Model{
+			return m, app.UpdateCategory(&storage.Category{Model: gorm.Model{
 				ID: m.id,
 			}, Name: m.inputName.Value(), Color: m.inputColor.Value()})
 		case "up", "down":

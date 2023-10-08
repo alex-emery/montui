@@ -16,7 +16,7 @@ type NewTransactionsMsg struct {
 }
 
 type NewCategoriesMsg struct {
-	Categories []storage.Category
+	Categories []*storage.Category
 }
 
 type SetCategoryMsg struct {
@@ -25,13 +25,13 @@ type SetCategoryMsg struct {
 }
 
 type UpdateCategoryMsg struct {
-	Category storage.Category
+	Category *storage.Category
 }
 
 type GetAccountsMsg struct{}
 
 type NewAccountsMsg struct {
-	Accounts []storage.Account
+	Accounts []*storage.Account
 }
 
 type GetBanksMsg struct{}

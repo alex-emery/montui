@@ -11,14 +11,14 @@ type accountStore struct {
 
 var _ AccountGetter = &accountStore{}
 
-func (s *accountStore) Insert(accounts ...Account) error {
+func (s *accountStore) Insert(accounts ...*Account) error {
 	res := s.db.Save(accounts)
 
 	return res.Error
 }
 
-func (s *accountStore) List() ([]Account, error) {
-	accounts := []Account{}
+func (s *accountStore) List() ([]*Account, error) {
+	accounts := []*Account{}
 	result := s.db.Find(&accounts)
 
 	if result.Error != nil {

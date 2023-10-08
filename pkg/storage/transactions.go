@@ -11,6 +11,8 @@ type transactionStore struct {
 	db *gorm.DB
 }
 
+var _ TransactionGetter = &transactionStore{}
+
 func (s *transactionStore) Insert(transactions ...*Transaction) error {
 	result := s.db.Create(transactions)
 	if result.Error != nil {
@@ -22,15 +24,10 @@ func (s *transactionStore) Insert(transactions ...*Transaction) error {
 	return result.Error
 }
 
-func (s *transactionStore) Get(id uint) (*Transaction, error) {
-	transaction := &Transaction{}
+func (s *transactionStore) Get(transaction *Transaction) error {
 
-	result := s.db.Preload("Category").First(transaction, id)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return transaction, nil
+	result := s.db.Preload("Category").First(transaction)
+	return result.Error
 }
 
 func (s *transactionStore) List() ([]*Transaction, error) {

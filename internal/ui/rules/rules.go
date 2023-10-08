@@ -21,7 +21,8 @@ func New() *Model {
 		table.NewFlexColumn("pattern", "Pattern", 2),
 		table.NewFlexColumn("category", "Category", 1),
 	}).Focused(true).
-		SortByAsc("name").
+		SortByAsc("category").
+		ThenSortByAsc("pattern").
 		HighlightStyle(styles.RowHighlight)
 
 	return &Model{table: t}
@@ -55,26 +56,28 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		m.table = m.table.WithRows(rows)
 	case tea.KeyMsg:
+		if m.edit {
+			break
+		}
 		switch msg.String() {
 		case "n":
-			if !m.edit {
-				m.edit = true
-				m.editModel = newEditModel(0, "", "", false)
-				return m, m.editModel.Init()
-			}
+			m.edit = true
+			m.editModel = newEditModel(0, "", "", false)
+			return m, m.editModel.Init()
+		case "d":
+			id := m.table.HighlightedRow().Data["id"].(uint)
+			return m, app.DeleteRule(id)
 
 		case "enter":
-			if !m.edit {
-				row := m.table.HighlightedRow().Data
-				m.edit = true
-				m.editModel = newEditModel(
-					row["id"].(uint),
-					row["pattern"].(string),
-					row["category"].(string),
-					true,
-				)
-				return m, m.editModel.Init()
-			}
+			row := m.table.HighlightedRow().Data
+			m.edit = true
+			m.editModel = newEditModel(
+				row["id"].(uint),
+				row["pattern"].(string),
+				row["category"].(string),
+				true,
+			)
+			return m, m.editModel.Init()
 		}
 	}
 

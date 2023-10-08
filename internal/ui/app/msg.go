@@ -68,6 +68,10 @@ type CreateRuleMsg struct {
 	Rule *storage.Rule
 }
 
+type DeleteRuleMsg struct {
+	ID uint
+}
+
 func NewErrorMsg(err error) tea.Msg {
 	return ErrorMsg{Err: err}
 }

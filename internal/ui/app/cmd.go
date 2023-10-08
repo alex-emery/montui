@@ -83,6 +83,13 @@ func CreateRule(rule *storage.Rule) tea.Cmd {
 	}
 }
 
+func DeleteRule(id uint) tea.Cmd {
+	return func() tea.Msg {
+		return DeleteRuleMsg{
+			ID: id,
+		}
+	}
+}
 func SendError(err error) tea.Cmd {
 	return func() tea.Msg {
 		return ErrorMsg{

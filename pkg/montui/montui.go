@@ -175,6 +175,10 @@ func (s *Montui) UpdateRule(rule *storage.Rule) error {
 	return s.store.Rules().Update(rule)
 }
 
+func (s *Montui) DeleteRule(id uint) error {
+	return s.store.Rules().Delete(id)
+}
+
 func (s *Montui) ListBanks() ([]nordigen.Integration, error) {
 	return s.client.ListBanks()
 }

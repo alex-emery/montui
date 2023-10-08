@@ -74,3 +74,17 @@ func (s *ruleStore) Update(rule *Rule) error {
 
 	return result.Error
 }
+
+func (s *ruleStore) Delete(ids ...uint) error {
+	rules := make([]Rule, 0, len(ids))
+	for _, id := range ids {
+		rules = append(rules, Rule{
+			Model: gorm.Model{
+				ID: id,
+			},
+		})
+	}
+
+	result := s.db.Delete(rules)
+	return result.Error
+}

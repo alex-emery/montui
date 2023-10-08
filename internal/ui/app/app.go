@@ -103,6 +103,15 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 				channel <- GetRulesMsg{}
 			}
 		})
+	case DeleteRuleMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.DeleteRule(msg.ID)
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetRulesMsg{}
+			}
+		})
 	}
 
 	return nil

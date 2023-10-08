@@ -90,6 +90,12 @@ func DeleteRule(id uint) tea.Cmd {
 		}
 	}
 }
+
+func Categorise() tea.Cmd {
+	return func() tea.Msg {
+		return CategoriseMsg{}
+	}
+}
 func SendError(err error) tea.Cmd {
 	return func() tea.Msg {
 		return ErrorMsg{

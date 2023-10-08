@@ -67,7 +67,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "d":
 			id := m.table.HighlightedRow().Data["id"].(uint)
 			return m, app.DeleteRule(id)
-
+		case "r":
+			return m, app.Categorise()
 		case "enter":
 			row := m.table.HighlightedRow().Data
 			m.edit = true

@@ -225,3 +225,24 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 
 	return nil
 }
+
+func (s *Montui) CategoriseTransactions() error {
+	transactions, err := s.store.Transactions().List()
+	if err != nil {
+		return err
+	}
+
+	err = s.classify.Categorise(transactions...)
+	if err != nil {
+		return err
+	}
+
+	for _, transaction := range transactions {
+		err = s.store.Transactions().Update(transaction)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

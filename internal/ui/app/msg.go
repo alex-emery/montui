@@ -72,6 +72,8 @@ type DeleteRuleMsg struct {
 	ID uint
 }
 
+type CategoriseMsg struct{}
+
 func NewErrorMsg(err error) tea.Msg {
 	return ErrorMsg{Err: err}
 }

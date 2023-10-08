@@ -112,6 +112,16 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 				channel <- GetRulesMsg{}
 			}
 		})
+	case CategoriseMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.CategoriseTransactions()
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetTransactionsMsg{}
+			}
+
+		})
 	}
 
 	return nil

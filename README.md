@@ -12,7 +12,8 @@ SECRET_KEY=
 
 filled in.
 These can be obtained from https://gocardless.com/bank-account-data/
-
+# Example
+![Example image of Montui displaying categorised transactions](<example.png>)
 # Walkthrough 
 
 Press tab to change between pages

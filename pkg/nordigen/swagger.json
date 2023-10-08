@@ -4521,24 +4521,35 @@
                 ]
             },
             "BankTransactionStatusSchema": {
-                "type": "object",
-                "properties": {
-                    "booked": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/TransactionSchema"
-                        }
-                    },
-                    "pending": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/TransactionSchema"
-                        }
-                    }
-                },
-                "required": [
-                    "booked"
-                ]
+              "type": "object",
+              "properties": {
+                "transactions": {
+                  "allOf": [{
+                        "$ref": "#/components/schemas/BankTransactionStatusSchemaTransactions"
+                  }]
+                }
+              },
+              "required": ["transactions"]
+            },
+            "BankTransactionStatusSchemaTransactions": {
+              "type": "object",
+              "properties": {
+                  "booked": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/components/schemas/TransactionSchema"
+                      }
+                  },
+                  "pending": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/components/schemas/TransactionSchema"
+                      }
+                  }
+              },
+              "required": [
+                  "booked"
+              ]
             },
             "CBCT": {
                 "type": "object",

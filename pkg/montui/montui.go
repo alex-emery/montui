@@ -68,7 +68,7 @@ func (s *Montui) FetchTransactions(ctx context.Context, accountID string, dateTo
 		for _, transaction := range transactions.Booked {
 			dbTransaction := &storage.Transaction{
 				AccountID:             account.ID,
-				InternalTransactionID: safe(transaction.TransactionID),
+				InternalTransactionID: safe(transaction.TransactionId),
 				Name:                  safe(transaction.CreditorName),
 				Date:                  safe(transaction.BookingDate),
 				Description:           safe(transaction.RemittanceInformationUnstructured),
@@ -150,14 +150,14 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 		return err
 	}
 
-	requisition := storage.Requisition{ID: *req.ID}
+	requisition := storage.Requisition{ID: *req.Id}
 
 	err = s.store.Requisitions().Insert(requisition)
 	if err != nil {
 		return err
 	}
 
-	accounts, err := s.client.GetAccounts(ctx, *req.ID)
+	accounts, err := s.client.GetAccounts(ctx, *req.Id)
 	if err != nil {
 		return err
 	}
@@ -166,7 +166,7 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 		requisition.Accounts = append(requisition.Accounts,
 			storage.Account{
 				ID:           account,
-				RequsitionID: *req.ID,
+				RequsitionID: *req.Id,
 			})
 	}
 

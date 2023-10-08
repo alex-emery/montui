@@ -33,7 +33,7 @@ func newTokenStore(secretID, secretKey string) (*TokenStore, error) {
 	}
 
 	req := JWTObtainPairRequest{
-		SecretID:  secretID,
+		SecretId:  secretID, //nolint:revive //this is a generated field
 		SecretKey: secretKey,
 	}
 
@@ -104,7 +104,7 @@ func (c *Nordigen) CreateAgreement(ctx context.Context, institutionID string) (*
 	accessValidForDays := 30
 
 	acceptEUARes, err := c.client.CreateEUAWithResponse(ctx, EndUserAgreementRequest{
-		InstitutionID:      institutionID,
+		InstitutionId:      institutionID, //nolint:revive // generated field
 		AccessScope:        &scopes,
 		MaxHistoricalDays:  &historicalDays,
 		AccessValidForDays: &accessValidForDays,
@@ -117,7 +117,7 @@ func (c *Nordigen) CreateAgreement(ctx context.Context, institutionID string) (*
 		return nil, fmt.Errorf("invalid status code %d", acceptEUARes.StatusCode())
 	}
 
-	return acceptEUARes.JSON201.ID, nil
+	return acceptEUARes.JSON201.Id, nil
 }
 
 func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreementID *uuid.UUID, instituteID string) (*SpectacularRequisition, error) {
@@ -127,7 +127,7 @@ func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreement
 
 	reqResp, err := c.client.CreateRequisitionWithFormdataBodyWithResponse(ctx, CreateRequisitionFormdataRequestBody{
 		Redirect:          &hostRedirect,
-		InstitutionID:     instituteID,
+		InstitutionId:     instituteID, //nolint:revive // generated field
 		Agreement:         agreementID,
 		Reference:         &ref,
 		UserLanguage:      &lang,
@@ -146,7 +146,7 @@ func (c *Nordigen) InitiateRequsition(ctx context.Context, ref string, agreement
 }
 
 func (c *Nordigen) GetAccounts(ctx context.Context, reqID uuid.UUID) ([]uuid.UUID, error) {
-	reqIDResp, err := c.client.RequisitionByIDWithResponse(ctx, reqID)
+	reqIDResp, err := c.client.RequisitionByIdWithResponse(ctx, reqID) //nolint:revive // generated field
 	if err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func WaitForRedirect(_ uuid.UUID) error {
 	return nil
 }
 
-func (c *Nordigen) GetTransactions(ctx context.Context, accountID string, dateFrom, dateTo *time.Time) (*BankTransactionStatusSchema, error) {
+func (c *Nordigen) GetTransactions(ctx context.Context, accountID string, dateFrom, dateTo *time.Time) (*BankTransactionStatusSchemaTransactions, error) {
 	options := RetrieveAccountTransactionsParams{}
 	if dateFrom != nil {
 		options.DateFrom = &types.Date{Time: *dateFrom}
@@ -190,7 +190,7 @@ func (c *Nordigen) GetTransactions(ctx context.Context, accountID string, dateFr
 		return nil, err
 	}
 
-	return res.JSON200, nil
+	return &res.JSON200.Transactions, nil
 }
 
 func FakeData(path string) (*BankTransactionStatusSchema, error) {

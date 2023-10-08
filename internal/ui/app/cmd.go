@@ -17,6 +17,7 @@ func GetCategories() tea.Cmd {
 		return GetCategoriesMsg{}
 	}
 }
+
 func SetCategory(id, categoryID uint) tea.Cmd {
 	return func() tea.Msg {
 		return SetCategoryMsg{
@@ -57,5 +58,11 @@ func CreateLink(bankID string) tea.Cmd {
 func UpdateCategory(category *storage.Category) tea.Cmd {
 	return func() tea.Msg {
 		return UpdateCategoryMsg{Category: category}
+	}
+}
+
+func GetRules() tea.Cmd {
+	return func() tea.Msg {
+		return GetRulesMsg{}
 	}
 }

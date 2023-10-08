@@ -127,7 +127,6 @@ func (s *Montui) SetCategory(transactionID uint, categoryID uint) (*storage.Tran
 	}
 
 	err := s.store.Transactions().Update(transaction)
-	// err := s.store.Transactions().SetCategory(transactionID, categoryID)
 	if err != nil {
 		return nil, err
 	}
@@ -138,6 +137,10 @@ func (s *Montui) SetCategory(transactionID uint, categoryID uint) (*storage.Tran
 
 func (s *Montui) UpdateCategory(category *storage.Category) error {
 	return s.store.Categories().Update(category)
+}
+
+func (s *Montui) ListRules() ([]*storage.Rule, error) {
+	return s.store.Rules().List()
 }
 
 func (s *Montui) ListBanks() ([]nordigen.Integration, error) {

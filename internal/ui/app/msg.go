@@ -54,6 +54,12 @@ type CreateLinkMsg struct {
 type LinkReadyMsg struct {
 }
 
+type GetRulesMsg struct{}
+
+type NewRulesMsg struct {
+	Rules []*storage.Rule
+}
+
 func NewErrorMsg(err error) tea.Msg {
 	return ErrorMsg{Err: err}
 }

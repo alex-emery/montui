@@ -1,7 +1,6 @@
 package storage_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/alex-emery/montui/pkg/storage"
@@ -34,7 +33,4 @@ func TestRulesCRUD(t *testing.T) {
 	if err != nil {
 		t.Fatal("failed to create rule", err)
 	}
-
-	fmt.Println(queryRule)
-
 }

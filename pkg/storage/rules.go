@@ -55,7 +55,7 @@ func (s *ruleStore) Get(rule *Rule) error {
 
 func (s *ruleStore) List() ([]*Rule, error) {
 	var rules []*Rule
-	res := s.db.Find(&rules)
+	res := s.db.Preload("Category").Find(&rules)
 
 	if res.Error != nil {
 		return nil, res.Error

@@ -25,7 +25,6 @@ func (s *transactionStore) Insert(transactions ...*Transaction) error {
 }
 
 func (s *transactionStore) Get(transaction *Transaction) error {
-
 	result := s.db.Preload("Category").First(transaction)
 	return result.Error
 }

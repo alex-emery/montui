@@ -76,6 +76,15 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			c.montui.Link(c.ctx, msg.BankID)
 			channel <- LinkReadyMsg{}
 		})
+	case GetRulesMsg:
+		return Future(func(channel chan tea.Msg) {
+			rules, err := c.montui.ListRules()
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- NewRulesMsg{Rules: rules}
+			}
+		})
 	}
 
 	return nil

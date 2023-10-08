@@ -56,6 +56,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.table = m.table.WithRows(rows)
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "n":
+			if !m.edit {
+				m.edit = true
+				m.editModel = newEditModel(0, "", "", false)
+				return m, m.editModel.Init()
+			}
+
 		case "enter":
 			if !m.edit {
 				row := m.table.HighlightedRow().Data
@@ -64,6 +71,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					row["id"].(uint),
 					row["pattern"].(string),
 					row["category"].(string),
+					true,
 				)
 				return m, m.editModel.Init()
 			}

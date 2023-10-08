@@ -143,7 +143,7 @@ func (s *Montui) ListRules() ([]*storage.Rule, error) {
 	return s.store.Rules().List()
 }
 
-func (s *Montui) UpdateRule(rule *storage.Rule) error {
+func (s *Montui) findCategoryForRule(rule *storage.Rule) error {
 	category := &storage.Category{
 		Name: rule.Category.Name,
 	}
@@ -155,6 +155,22 @@ func (s *Montui) UpdateRule(rule *storage.Rule) error {
 
 	rule.CategoryID = category.ID
 	rule.Category = *category
+
+	return nil
+}
+
+func (s *Montui) CreateRule(rule *storage.Rule) error {
+	if err := s.findCategoryForRule(rule); err != nil {
+		return err
+	}
+
+	return s.store.Rules().Insert(rule)
+}
+
+func (s *Montui) UpdateRule(rule *storage.Rule) error {
+	if err := s.findCategoryForRule(rule); err != nil {
+		return err
+	}
 
 	return s.store.Rules().Update(rule)
 }

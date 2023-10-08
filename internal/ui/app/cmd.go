@@ -74,3 +74,19 @@ func UpdateRule(rule *storage.Rule) tea.Cmd {
 		}
 	}
 }
+
+func CreateRule(rule *storage.Rule) tea.Cmd {
+	return func() tea.Msg {
+		return CreateRuleMsg{
+			Rule: rule,
+		}
+	}
+}
+
+func SendError(err error) tea.Cmd {
+	return func() tea.Msg {
+		return ErrorMsg{
+			Err: err,
+		}
+	}
+}

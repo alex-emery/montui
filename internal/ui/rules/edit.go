@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"fmt"
+
 	"github.com/alex-emery/montui/internal/ui/app"
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -14,16 +16,17 @@ type editModel struct {
 	inputCategory textinput.Model
 	id            uint
 	cursor        int
+	edit          bool
 }
 
-func newEditModel(id uint, pattern, category string) editModel {
+func newEditModel(id uint, pattern, category string, edit bool) editModel {
 	inputPattern := textinput.New()
 	inputPattern.SetValue(pattern)
 	inputPattern.Focus()
 	inputCategory := textinput.New()
 	inputCategory.SetValue(category)
 
-	return editModel{id: id, inputPattern: inputPattern, inputCategory: inputCategory}
+	return editModel{id: id, inputPattern: inputPattern, inputCategory: inputCategory, edit: edit}
 }
 
 func (m editModel) Init() tea.Cmd { return nil }
@@ -36,14 +39,26 @@ func (m editModel) Update(msg tea.Msg) (editModel, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter":
-			return m, app.UpdateRule(&storage.Rule{
+			if len(m.inputPattern.Value()) == 0 {
+				return m, app.SendError(fmt.Errorf("pattern can not be empty"))
+			}
+			if len(m.inputCategory.Value()) == 0 {
+				return m, app.SendError(fmt.Errorf("category can not be empty"))
+			}
+
+			rule := &storage.Rule{
 				Model: gorm.Model{
 					ID: m.id,
 				},
 				Pattern: m.inputPattern.Value(),
 				Category: storage.Category{
 					Name: m.inputCategory.Value(),
-				}})
+				}}
+			if m.edit {
+				return m, app.UpdateRule(rule)
+			}
+			return m, app.CreateRule(rule)
+
 		case "up", "down":
 			if m.cursor == 0 {
 				m.cursor = 1

@@ -143,6 +143,22 @@ func (s *Montui) ListRules() ([]*storage.Rule, error) {
 	return s.store.Rules().List()
 }
 
+func (s *Montui) UpdateRule(rule *storage.Rule) error {
+	category := &storage.Category{
+		Name: rule.Category.Name,
+	}
+
+	err := s.store.Categories().Get(category)
+	if err != nil {
+		return err
+	}
+
+	rule.CategoryID = category.ID
+	rule.Category = *category
+
+	return s.store.Rules().Update(rule)
+}
+
 func (s *Montui) ListBanks() ([]nordigen.Integration, error) {
 	return s.client.ListBanks()
 }

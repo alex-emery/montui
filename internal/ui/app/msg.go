@@ -60,6 +60,10 @@ type NewRulesMsg struct {
 	Rules []*storage.Rule
 }
 
+type UpdateRuleMsg struct {
+	Rule *storage.Rule
+}
+
 func NewErrorMsg(err error) tea.Msg {
 	return ErrorMsg{Err: err}
 }

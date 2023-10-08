@@ -12,26 +12,26 @@ import (
 // I'm not a fan of this whole thing, its super gross
 // Closing the view on a "GetCategoriesMsg" isn't great
 
-type categoryEditModel struct {
+type editModel struct {
 	inputName  textinput.Model
 	inputColor textinput.Model
 	id         uint
 	cursor     int
 }
 
-func newCategoryEdit(id uint, category, color string) categoryEditModel {
+func newEditModel(id uint, category, color string) editModel {
 	inputName := textinput.New()
 	inputName.SetValue(category)
 	inputName.Focus()
 	inputColor := textinput.New()
 	inputColor.SetValue(color)
 
-	return categoryEditModel{id: id, inputName: inputName, inputColor: inputColor}
+	return editModel{id: id, inputName: inputName, inputColor: inputColor}
 }
 
-func (m categoryEditModel) Init() tea.Cmd { return nil }
+func (m editModel) Init() tea.Cmd { return nil }
 
-func (m categoryEditModel) Update(msg tea.Msg) (categoryEditModel, tea.Cmd) {
+func (m editModel) Update(msg tea.Msg) (editModel, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 	switch msg := msg.(type) {
@@ -63,11 +63,7 @@ func (m categoryEditModel) Update(msg tea.Msg) (categoryEditModel, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-type CategorySelect struct {
-	ID uint
-}
-
-func (m categoryEditModel) View() string {
+func (m editModel) View() string {
 	s := lipgloss.JoinVertical(lipgloss.Left, "Edit Category",
 		"Name "+m.inputName.View(),
 		"Color "+m.inputColor.View(),

@@ -66,3 +66,11 @@ func GetRules() tea.Cmd {
 		return GetRulesMsg{}
 	}
 }
+
+func UpdateRule(rule *storage.Rule) tea.Cmd {
+	return func() tea.Msg {
+		return UpdateRuleMsg{
+			Rule: rule,
+		}
+	}
+}

@@ -9,11 +9,11 @@ import (
 )
 
 type Model struct {
-	table    table.Model
-	height   int
-	width    int
-	edit     bool
-	category categoryEditModel
+	table     table.Model
+	height    int
+	width     int
+	edit      bool
+	editModel editModel
 }
 
 func (m Model) Init() tea.Cmd {
@@ -49,17 +49,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			if !m.edit {
-
 				row := m.table.HighlightedRow().Data
 				m.edit = true
-				m.category = newCategoryEdit(row["id"].(uint), row["name"].(string), row["color"].(string))
-				return m, m.category.Init()
+				m.editModel = newEditModel(row["id"].(uint), row["name"].(string), row["color"].(string))
+				return m, m.editModel.Init()
 			}
 		}
 	}
 
 	if m.edit {
-		m.category, cmd = m.category.Update(msg)
+		m.editModel, cmd = m.editModel.Update(msg)
 		cmds = append(cmds, cmd)
 		return m, tea.Batch(cmds...)
 	}
@@ -73,9 +72,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	body := m.table.View()
 	if m.edit {
-		body = m.category.View()
+		body = m.editModel.View()
 	}
-	return styles.CategoriesPage.Height(m.height).Width(m.width).Render("Categories" + "\n" + body)
+	return styles.CategoriesPage.Height(m.height).Width(m.width).Render("Categories\n" + body)
 }
 
 func New() (*Model, error) {

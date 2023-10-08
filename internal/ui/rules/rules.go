@@ -12,6 +12,8 @@ type Model struct {
 	table  table.Model
 	height int
 	width  int
+	edit   bool
+	editModel
 }
 
 func New() *Model {
@@ -37,9 +39,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 		m.width = msg.Width
 		m.table = m.table.WithTargetWidth(m.width).WithPageSize(m.height - 6)
+	case app.GetRulesMsg:
+		m.edit = false
 	case app.NewRulesMsg:
 		rules := msg.Rules
-
 		rows := make([]table.Row, 0, len(rules))
 		for _, rule := range rules {
 			newRow := table.NewRow(table.RowData{
@@ -51,6 +54,26 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		}
 		m.table = m.table.WithRows(rows)
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			if !m.edit {
+				row := m.table.HighlightedRow().Data
+				m.edit = true
+				m.editModel = newEditModel(
+					row["id"].(uint),
+					row["pattern"].(string),
+					row["category"].(string),
+				)
+				return m, m.editModel.Init()
+			}
+		}
+	}
+
+	if m.edit {
+		m.editModel, cmd = m.editModel.Update(msg)
+		cmds = append(cmds, cmd)
+		return m, tea.Batch(cmds...)
 	}
 
 	m.table, cmd = m.table.Update(msg)
@@ -60,5 +83,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	return m.table.View()
+	body := m.table.View()
+	if m.edit {
+		body = m.editModel.View()
+	}
+
+	return styles.RulesPage.Height(m.height).Width(m.width).Render("Rules\n" + body)
 }

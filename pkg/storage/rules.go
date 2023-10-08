@@ -70,7 +70,7 @@ func (s *ruleStore) Insert(rules ...*Rule) error {
 }
 
 func (s *ruleStore) Update(rule *Rule) error {
-	result := s.db.Save(rule)
+	result := s.db.Model(&rule).Updates(rule)
 
 	return result.Error
 }

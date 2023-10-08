@@ -86,5 +86,6 @@ func (s *ruleStore) Delete(ids ...uint) error {
 	}
 
 	result := s.db.Delete(rules)
+
 	return result.Error
 }

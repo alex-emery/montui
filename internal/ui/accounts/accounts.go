@@ -26,7 +26,7 @@ func (m Accounts) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.workflow != nil {
 		if _, ok := msg.(app.LinkReadyMsg); ok {
 			m.workflow = nil
-			return m, nil
+			return m, app.GetAccounts()
 		}
 
 		workflow, cmd := m.workflow.Update(msg)

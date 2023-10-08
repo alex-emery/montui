@@ -31,6 +31,7 @@ func TestTransactions(t *testing.T) {
 			ID: transaction.ID,
 		},
 	}
+
 	err = store.Transactions().Get(&insertedTransaction)
 	if err != nil {
 		t.Fatal(err)

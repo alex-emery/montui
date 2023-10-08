@@ -11,6 +11,8 @@ var (
 
 	CategoriesPage = lipgloss.NewStyle()
 
+	RulesPage = lipgloss.NewStyle()
+
 	ErrorBar = lipgloss.NewStyle().Height(2)
 
 	Table = lipgloss.NewStyle()

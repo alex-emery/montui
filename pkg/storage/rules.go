@@ -55,7 +55,7 @@ func (s *ruleStore) Get(rule *Rule) error {
 
 func (s *ruleStore) List() ([]*Rule, error) {
 	var rules []*Rule
-	res := s.db.Find(&rules)
+	res := s.db.Preload("Category").Find(&rules)
 
 	if res.Error != nil {
 		return nil, res.Error
@@ -70,7 +70,22 @@ func (s *ruleStore) Insert(rules ...*Rule) error {
 }
 
 func (s *ruleStore) Update(rule *Rule) error {
-	result := s.db.Save(rule)
+	result := s.db.Model(&rule).Updates(rule)
+
+	return result.Error
+}
+
+func (s *ruleStore) Delete(ids ...uint) error {
+	rules := make([]Rule, 0, len(ids))
+	for _, id := range ids {
+		rules = append(rules, Rule{
+			Model: gorm.Model{
+				ID: id,
+			},
+		})
+	}
+
+	result := s.db.Delete(rules)
 
 	return result.Error
 }

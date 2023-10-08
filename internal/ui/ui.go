@@ -6,6 +6,7 @@ import (
 	"github.com/alex-emery/montui/internal/ui/accounts"
 	"github.com/alex-emery/montui/internal/ui/app"
 	"github.com/alex-emery/montui/internal/ui/categories"
+	"github.com/alex-emery/montui/internal/ui/rules"
 	"github.com/alex-emery/montui/internal/ui/styles"
 	"github.com/alex-emery/montui/internal/ui/transactions"
 	"github.com/alex-emery/montui/pkg/montui"
@@ -22,6 +23,7 @@ const (
 	AccountPage = iota
 	TransactionPage
 	CategoriesPage
+	RulesPage
 )
 
 type model struct {
@@ -34,7 +36,11 @@ type model struct {
 }
 
 func (m model) Init() tea.Cmd {
-	return tea.Batch(m.pages[0].Init(), m.pages[1].Init(), m.pages[2].Init())
+	cmds := make([]tea.Cmd, 0, len(m.pages))
+	for _, page := range m.pages {
+		cmds = append(cmds, page.Init())
+	}
+	return tea.Batch(cmds...)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -108,10 +114,13 @@ func New(montui *montui.Montui) (*model, error) {
 
 	accountModel := accounts.New()
 
+	rulesModel := rules.New()
+
 	pages := []tea.Model{
 		accountModel,
 		transactionModel,
 		categoriesModel,
+		rulesModel,
 	}
 
 	m := &model{app: app.New(montui), pages: pages, selected: 0}

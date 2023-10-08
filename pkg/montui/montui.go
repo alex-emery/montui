@@ -127,7 +127,6 @@ func (s *Montui) SetCategory(transactionID uint, categoryID uint) (*storage.Tran
 	}
 
 	err := s.store.Transactions().Update(transaction)
-	// err := s.store.Transactions().SetCategory(transactionID, categoryID)
 	if err != nil {
 		return nil, err
 	}
@@ -138,6 +137,46 @@ func (s *Montui) SetCategory(transactionID uint, categoryID uint) (*storage.Tran
 
 func (s *Montui) UpdateCategory(category *storage.Category) error {
 	return s.store.Categories().Update(category)
+}
+
+func (s *Montui) ListRules() ([]*storage.Rule, error) {
+	return s.store.Rules().List()
+}
+
+func (s *Montui) findCategoryForRule(rule *storage.Rule) error {
+	category := &storage.Category{
+		Name: rule.Category.Name,
+	}
+
+	err := s.store.Categories().Get(category)
+	if err != nil {
+		return err
+	}
+
+	rule.CategoryID = category.ID
+	rule.Category = *category
+
+	return nil
+}
+
+func (s *Montui) CreateRule(rule *storage.Rule) error {
+	if err := s.findCategoryForRule(rule); err != nil {
+		return err
+	}
+
+	return s.store.Rules().Insert(rule)
+}
+
+func (s *Montui) UpdateRule(rule *storage.Rule) error {
+	if err := s.findCategoryForRule(rule); err != nil {
+		return err
+	}
+
+	return s.store.Rules().Update(rule)
+}
+
+func (s *Montui) DeleteRule(id uint) error {
+	return s.store.Rules().Delete(id)
 }
 
 func (s *Montui) ListBanks() ([]nordigen.Integration, error) {
@@ -182,6 +221,27 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 	err = s.store.Requisitions().Update(&requisition)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (s *Montui) CategoriseTransactions() error {
+	transactions, err := s.store.Transactions().List()
+	if err != nil {
+		return err
+	}
+
+	err = s.classify.Categorise(transactions...)
+	if err != nil {
+		return err
+	}
+
+	for _, transaction := range transactions {
+		err = s.store.Transactions().Update(transaction)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

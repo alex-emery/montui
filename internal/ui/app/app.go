@@ -76,6 +76,52 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			c.montui.Link(c.ctx, msg.BankID)
 			channel <- LinkReadyMsg{}
 		})
+	case GetRulesMsg:
+		return Future(func(channel chan tea.Msg) {
+			rules, err := c.montui.ListRules()
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- NewRulesMsg{Rules: rules}
+			}
+		})
+	case UpdateRuleMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.UpdateRule(msg.Rule)
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetRulesMsg{}
+			}
+		})
+	case CreateRuleMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.CreateRule(msg.Rule)
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetRulesMsg{}
+			}
+		})
+	case DeleteRuleMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.DeleteRule(msg.ID)
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetRulesMsg{}
+			}
+		})
+	case CategoriseMsg:
+		return Future(func(channel chan tea.Msg) {
+			err := c.montui.CategoriseTransactions()
+			if err != nil {
+				channel <- NewErrorMsg(err)
+			} else {
+				channel <- GetTransactionsMsg{}
+			}
+
+		})
 	}
 
 	return nil

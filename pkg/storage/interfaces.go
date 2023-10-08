@@ -44,4 +44,5 @@ type RuleGetter interface {
 	Get(*Rule) error
 	List() ([]*Rule, error)
 	Update(*Rule) error
+	Delete(...uint) error
 }

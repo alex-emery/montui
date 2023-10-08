@@ -17,6 +17,7 @@ func GetCategories() tea.Cmd {
 		return GetCategoriesMsg{}
 	}
 }
+
 func SetCategory(id, categoryID uint) tea.Cmd {
 	return func() tea.Msg {
 		return SetCategoryMsg{
@@ -57,5 +58,48 @@ func CreateLink(bankID string) tea.Cmd {
 func UpdateCategory(category *storage.Category) tea.Cmd {
 	return func() tea.Msg {
 		return UpdateCategoryMsg{Category: category}
+	}
+}
+
+func GetRules() tea.Cmd {
+	return func() tea.Msg {
+		return GetRulesMsg{}
+	}
+}
+
+func UpdateRule(rule *storage.Rule) tea.Cmd {
+	return func() tea.Msg {
+		return UpdateRuleMsg{
+			Rule: rule,
+		}
+	}
+}
+
+func CreateRule(rule *storage.Rule) tea.Cmd {
+	return func() tea.Msg {
+		return CreateRuleMsg{
+			Rule: rule,
+		}
+	}
+}
+
+func DeleteRule(id uint) tea.Cmd {
+	return func() tea.Msg {
+		return DeleteRuleMsg{
+			ID: id,
+		}
+	}
+}
+
+func Categorise() tea.Cmd {
+	return func() tea.Msg {
+		return CategoriseMsg{}
+	}
+}
+func SendError(err error) tea.Cmd {
+	return func() tea.Msg {
+		return ErrorMsg{
+			Err: err,
+		}
 	}
 }

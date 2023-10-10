@@ -10,6 +10,7 @@ import (
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/google/uuid"
 	"github.com/pkg/browser"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -17,22 +18,23 @@ type Montui struct {
 	client   *nordigen.Nordigen
 	store    storage.Storage
 	classify *categorise.Categorise
+	logger   *zap.Logger
 }
 
-func New(nordigenSecretID, nordigenSecretKey, dir string) (*Montui, error) {
-	store, err := storage.New(dir)
+func New(nordigenSecretID, nordigenSecretKey, dir string, logger *zap.Logger) (*Montui, error) {
+	store, err := storage.New(dir, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := nordigen.New(nordigenSecretID, nordigenSecretKey)
+	client, err := nordigen.New(nordigenSecretID, nordigenSecretKey, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	classify := categorise.New(store)
+	classify := categorise.New(store, logger)
 
-	return &Montui{store: store, client: client, classify: classify}, nil
+	return &Montui{store: store, client: client, classify: classify, logger: logger}, nil
 }
 
 func (s *Montui) GetAccounts() ([]*storage.Account, error) {
@@ -49,6 +51,8 @@ func (s *Montui) FetchTransactions(ctx context.Context, accountID string, dateTo
 	}
 
 	for _, account := range accounts {
+		s.logger.Info("fetching transactions", zap.String("account id", account.ID.String()))
+
 		transactions, err := s.client.GetTransactions(ctx, account.ID.String(), account.LastFetch, nil)
 		if err != nil {
 			return nil, err
@@ -185,6 +189,9 @@ func (s *Montui) ListBanks() ([]nordigen.Integration, error) {
 
 func (s *Montui) Link(ctx context.Context, institutionID string) error {
 	ref := uuid.New()
+
+	s.logger.Info("starting requisition")
+
 	req, err := s.client.InitiateRequsition(ctx, ref.String(), nil, institutionID)
 
 	if err != nil {
@@ -193,7 +200,12 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 
 	_ = browser.OpenURL(*req.Link) //TODO: expose the link to the user without relying on this.
 
+	s.logger.Info("waiting for callback", zap.String("link", *req.Link))
+
 	err = nordigen.WaitForRedirect(ref)
+
+	s.logger.Info("callback succeeded", zap.String("link", *req.Link))
+
 	if err != nil {
 		return err
 	}
@@ -211,6 +223,8 @@ func (s *Montui) Link(ctx context.Context, institutionID string) error {
 	}
 
 	for _, account := range accounts {
+		s.logger.Info("new account", zap.String("account", account.String()))
+
 		requisition.Accounts = append(requisition.Accounts,
 			storage.Account{
 				ID:           account,

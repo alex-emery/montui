@@ -4,11 +4,12 @@ import (
 	"testing"
 
 	"github.com/alex-emery/montui/pkg/storage"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 func TestRulesCRUD(t *testing.T) {
-	store, err := storage.New("file::memory:?cache=shared")
+	store, err := storage.New("file::memory:?cache=shared", zap.NewNop())
 
 	if err != nil {
 		t.Fatal(err)

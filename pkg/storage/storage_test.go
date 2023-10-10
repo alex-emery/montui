@@ -6,11 +6,12 @@ import (
 
 	"github.com/alex-emery/montui/pkg/storage"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 func TestTransactions(t *testing.T) {
-	store, err := storage.New("file::memory:?cache=shared")
+	store, err := storage.New("file::memory:?cache=shared", zap.NewNop())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +70,7 @@ func TestTransactions(t *testing.T) {
 }
 
 func TestAccountsAndReqs(t *testing.T) {
-	store, err := storage.New("file::memory:?cache=shared")
+	store, err := storage.New("file::memory:?cache=shared", zap.NewNop())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -130,7 +131,7 @@ func TestAccountsAndReqs(t *testing.T) {
 }
 
 func TestRequisitions(t *testing.T) {
-	store, err := storage.New("file::memory:?cache=shared")
+	store, err := storage.New("file::memory:?cache=shared", zap.NewNop())
 	if err != nil {
 		t.Fatal(err)
 	}

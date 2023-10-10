@@ -28,7 +28,6 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 				return NewErrorMsg(err)
 			}
 			return NewTransactionsMsg{Transactions: transactions}
-
 		}
 	case GetTransactionsMsg:
 		return func() tea.Msg {
@@ -47,7 +46,6 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			} else {
 				return NewCategoriesMsg{Categories: categories}
 			}
-
 		}
 
 	case SetCategoryMsg:
@@ -60,7 +58,6 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			}
 		}
 	case UpdateCategoryMsg:
-
 		return func() tea.Msg {
 			err := c.montui.UpdateCategory(msg.Category)
 			if err != nil {
@@ -76,7 +73,6 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			}
 			return NewAccountsMsg{Accounts: accounts}
 		}
-
 	case GetBanksMsg:
 		return func() tea.Msg {
 			banks, err := c.montui.ListBanks()
@@ -131,7 +127,6 @@ func (c *App) Update(msg tea.Msg) tea.Cmd {
 			}
 			return GetTransactionsMsg{}
 		}
-
 	}
 
 	return nil

@@ -10,11 +10,13 @@ import (
 
 	"github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 type Nordigen struct {
 	client ClientWithResponsesInterface
 	tokens *TokenStore
+	logger *zap.Logger
 }
 
 type TokenStore struct {
@@ -62,7 +64,7 @@ func (tokens *TokenStore) authProvider(_ context.Context, req *http.Request) err
 	return nil
 }
 
-func New(secretID, secretKey string) (*Nordigen, error) {
+func New(secretID, secretKey string, logger *zap.Logger) (*Nordigen, error) {
 	tokens, err := newTokenStore(secretID, secretKey)
 	if err != nil {
 		return nil, err
@@ -76,6 +78,7 @@ func New(secretID, secretKey string) (*Nordigen, error) {
 	nordigen := &Nordigen{
 		client: client,
 		tokens: tokens,
+		logger: logger,
 	}
 
 	return nordigen, nil

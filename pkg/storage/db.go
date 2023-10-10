@@ -3,14 +3,13 @@ package storage
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
-	"time"
 
 	"github.com/lucasb-eyer/go-colorful"
+	"go.uber.org/zap"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"moul.io/zapgorm2"
 )
 
 type storageImpl struct {
@@ -22,26 +21,14 @@ type storageImpl struct {
 	requsitions  *requisitionStore
 }
 
-func New(filename string) (Storage, error) {
+func New(filename string, logger *zap.Logger) (Storage, error) {
 	shouldSeed := false
 	if _, err := os.Stat(filename); errors.Is(err, os.ErrNotExist) {
 		shouldSeed = true
 	}
 
-	// setup file logging so it doesn't mess with the UI
-	// TODO: make this optional to better support non tui use.
-	logFile, err := os.Create("gorm.log")
-	if err != nil {
-		return nil, err
-	}
-
-	fileLogger := log.New(logFile, "\r\n", log.LstdFlags)
-	gormLogger := logger.New(fileLogger, logger.Config{
-		SlowThreshold:             200 * time.Millisecond,
-		LogLevel:                  logger.Warn,
-		IgnoreRecordNotFoundError: false,
-		Colorful:                  true,
-	})
+	gormLogger := zapgorm2.New(logger)
+	gormLogger.SetAsDefault() // optional: configure gorm to use this zapgorm.Logger for callbacks
 
 	db, err := gorm.Open(sqlite.Open(filename), &gorm.Config{Logger: gormLogger})
 	if err != nil {
